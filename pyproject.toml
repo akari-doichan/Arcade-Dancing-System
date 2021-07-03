@@ -1,13 +1,17 @@
 [tool.poetry]
-name = "arcade-dancing-system"
+name = "Arcade-Dancing-System"
 version = "0.1.0"
 description = "A Novel Arcade dancing System."
 authors = ["akari-doichan", "iwasakishuto <cabernet.rock@gmail.com>"]
 license = "MIT"
+packages = [
+    {include = "ddrev"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 mediapipe = "^0.8.6"
+numpy = "^1.21.0"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^5.5.5"
