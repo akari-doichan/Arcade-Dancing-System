@@ -1,19 +1,25 @@
-#coding: utf-8
-import cv2
+# coding: utf-8
 import warnings
-import numpy as np
-
-import numpy.typing as npt
 from typing import Callable, List
+
+import cv2
+import numpy as np
+import numpy.typing as npt
 
 from .utils._colorings import toGREEN, toRED
 
+
 class VideoCapture(cv2.VideoCapture):
     """Wrapper class for ``cv2.VideoCapture``."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.isOpened():
-            warnings.warn(toRED("VideoCapture is not opened. Please make sure the device number is correct."))
+            warnings.warn(
+                toRED(
+                    "VideoCapture is not opened. Please make sure the device number is correct."
+                )
+            )
 
     @classmethod
     def check_device(cls) -> None:
@@ -37,33 +43,41 @@ class VideoCapture(cv2.VideoCapture):
             cap.release()
             if flag:
                 break
-            idx+=1
+            idx += 1
         print(f"{'='*30}\n{toGREEN(idx)} devices are connected.")
 
     def describe(self) -> None:
         """Describe the device information.
 
-        Examples:    
+        Examples:
             >>> from ddrev.realtime import VideoCapture
             >>> cap = VideoCapture(0)
             >>> cap.describe()
             [Device Information]
                     Width  : 1280.0
                     Height : 720.0
-                    FPS    : 29.000049 
+                    FPS    : 29.000049
             >>> cap.release()
         """
-        print(f"""[Device Information]
+        print(
+            f"""[Device Information]
         Width  : {toGREEN(self.get(cv2.CAP_PROP_FRAME_WIDTH))}
         Height : {toGREEN(self.get(cv2.CAP_PROP_FRAME_HEIGHT))}
-        FPS    : {toGREEN(self.get(cv2.CAP_PROP_FPS))} """)
+        FPS    : {toGREEN(self.get(cv2.CAP_PROP_FPS))} """
+        )
 
     @staticmethod
-    def _do_nothing(frame:npt.NDArray[np.uint8], key:int):
+    def _do_nothing(frame: npt.NDArray[np.uint8], key: int):
         """Do nothing."""
         return frame
 
-    def realtime_process(self, function:Callable[[npt.NDArray[np.uint8], int], npt.NDArray[np.uint8]]=None, stop_keys:List[int]=[27, ord("q")], delay:int=1, winname:str="Realtime Demonstration") -> None:
+    def realtime_process(
+        self,
+        function: Callable[[npt.NDArray[np.uint8], int], npt.NDArray[np.uint8]] = None,
+        stop_keys: List[int] = [27, ord("q")],
+        delay: int = 1,
+        winname: str = "Realtime Demonstration",
+    ) -> None:
         """Do realtime video processing.
 
         Args:
@@ -71,14 +85,16 @@ class VideoCapture(cv2.VideoCapture):
             stop_keys (List[int], optional)                                         : Enter these keys to end the process. Defaults to ``[27, ord("q")]``.
             delay (int, optional)                                                   : Waits for a pressed key [ms]. Defaults to ``1``.
             winname (str, optional)                                                 : The window name that visualizes the results of real-time video processing. Defaults to ``"Realtime Demonstration"``.
-        
-        Examples:    
+
+        Examples:
             >>> from ddrev.realtime import VideoCapture
             >>> cap = VideoCapture(0)
             >>> cap.realtime_process()
         """
         if (function is None) or (not callable(function)):
-            warnings.warn(f"No video processing function {toGREEN('function')} was given, so do nothing (using {toGREEN('self._do_nothing')} instead.)")
+            warnings.warn(
+                f"No video processing function {toGREEN('function')} was given, so do nothing (using {toGREEN('self._do_nothing')} instead.)"
+            )
             function = self._do_nothing
         while True:
             is_ok, frame = self.read()
@@ -88,7 +104,7 @@ class VideoCapture(cv2.VideoCapture):
             frame = function(frame, key)
             cv2.imshow(winname=winname, mat=frame)
             key = cv2.waitKey(1)
-            if (key == 27) or (key==ord("q")):
+            if (key == 27) or (key == ord("q")):
                 break
         self.release()
         cv2.destroyWindow(winname)
