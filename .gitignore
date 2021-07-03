@@ -4,6 +4,7 @@
 # --- Added by akari-doichan ---
 # <--- Added by iwasakishuto ---
 *.DS_Store
+.vscode
 # --- Added by iwasakishuto ---
 
 # Byte-compiled / optimized / DLL files
