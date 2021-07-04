@@ -10,9 +10,14 @@ from .utils._colorings import toGREEN, toRED
 
 
 class VideoCapture(cv2.VideoCapture):
-    """Wrapper class for ``cv2.VideoCapture``."""
+    """Wrapper class for ``cv2.VideoCapture``.
 
-    def __init__(self, *args, **kwargs):
+    Attributes:
+        tm (cv2.TickMeter) :
+        max_count (int)    :
+    """
+
+    def __init__(self, *args, max_count: int = 10, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.isOpened():
             warnings.warn(
@@ -20,6 +25,15 @@ class VideoCapture(cv2.VideoCapture):
                     "VideoCapture is not opened. Please make sure the device number is correct."
                 )
             )
+
+    #     self.tm = cv2.TickMeter()
+    #     self.max_count = max_count
+
+    # def calc_fps(self):
+    #     self.tm.stop()
+    #     fps = self.max_count / self.tm.getTimeSec()
+    #     self.tm.reset()
+    #     self.tm.start()
 
     @classmethod
     def check_device(cls) -> None:
@@ -103,7 +117,6 @@ class VideoCapture(cv2.VideoCapture):
             key = cv2.waitKey(delay=delay)
             frame = function(frame, key)
             cv2.imshow(winname=winname, mat=frame)
-            key = cv2.waitKey(1)
             if (key == 27) or (key == ord("q")):
                 break
         self.release()

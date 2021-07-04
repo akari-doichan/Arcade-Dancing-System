@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ddrev.realtime &mdash; Arcade Dance System  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Arcade Dance System
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Arcade Dance System</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ddrev.realtime</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ddrev.realtime</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+
+<span class="kn">from</span> <span class="nn">.utils._colorings</span> <span class="kn">import</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
+
+
+<div class="viewcode-block" id="VideoCapture"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture">[docs]</a><span class="k">class</span> <span class="nc">VideoCapture</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper class for ``cv2.VideoCapture``.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        tm (cv2.TickMeter) :</span>
+<span class="sd">        max_count (int)    :</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">max_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="n">toRED</span><span class="p">(</span>
+                    <span class="s2">&quot;VideoCapture is not opened. Please make sure the device number is correct.&quot;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1">#     self.tm = cv2.TickMeter()</span>
+    <span class="c1">#     self.max_count = max_count</span>
+
+    <span class="c1"># def calc_fps(self):</span>
+    <span class="c1">#     self.tm.stop()</span>
+    <span class="c1">#     fps = self.max_count / self.tm.getTimeSec()</span>
+    <span class="c1">#     self.tm.reset()</span>
+    <span class="c1">#     self.tm.start()</span>
+
+<div class="viewcode-block" id="VideoCapture.check_device"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture.check_device">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">check_device</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check the connected device number.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.realtime import VideoCapture</span>
+<span class="sd">            &gt;&gt;&gt; VideoCapture.check_device()</span>
+<span class="sd">            Device Number 0 is found</span>
+<span class="sd">            Device Number 1 is found</span>
+<span class="sd">            Device Number 2 is NOT found</span>
+<span class="sd">            ==============================</span>
+<span class="sd">            2 devices are connected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">cap</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">()</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">toRED</span><span class="p">(</span><span class="s2">&quot;NOT found&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">flag</span> <span class="k">else</span> <span class="n">toGREEN</span><span class="p">(</span><span class="s2">&quot;found&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device Number </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">30</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="si">}</span><span class="s2"> devices are connected.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VideoCapture.describe"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Describe the device information.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.realtime import VideoCapture</span>
+<span class="sd">            &gt;&gt;&gt; cap = VideoCapture(0)</span>
+<span class="sd">            &gt;&gt;&gt; cap.describe()</span>
+<span class="sd">            [Device Information]</span>
+<span class="sd">                    Width  : 1280.0</span>
+<span class="sd">                    Height : 720.0</span>
+<span class="sd">                    FPS    : 29.000049</span>
+<span class="sd">            &gt;&gt;&gt; cap.release()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;[Device Information]</span>
+<span class="s2">        Width  : </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">))</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        Height : </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">))</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        FPS    : </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">))</span><span class="si">}</span><span class="s2"> &quot;&quot;&quot;</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_do_nothing</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Do nothing.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">frame</span>
+
+<div class="viewcode-block" id="VideoCapture.realtime_process"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture.realtime_process">[docs]</a>    <span class="k">def</span> <span class="nf">realtime_process</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">stop_keys</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">27</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)],</span>
+        <span class="n">delay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">winname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Realtime Demonstration&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Do realtime video processing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            function (Callable[[npt.NDArray[np.uint8], int], npt.NDArray[np.uint8]], optional): Function to process BGR image from webcame and return BGR image. Defaults to ``self._do_nothing``.</span>
+<span class="sd">            stop_keys (List[int], optional)                                         : Enter these keys to end the process. Defaults to ``[27, ord(&quot;q&quot;)]``.</span>
+<span class="sd">            delay (int, optional)                                                   : Waits for a pressed key [ms]. Defaults to ``1``.</span>
+<span class="sd">            winname (str, optional)                                                 : The window name that visualizes the results of real-time video processing. Defaults to ``&quot;Realtime Demonstration&quot;``.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.realtime import VideoCapture</span>
+<span class="sd">            &gt;&gt;&gt; cap = VideoCapture(0)</span>
+<span class="sd">            &gt;&gt;&gt; cap.realtime_process()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">function</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No video processing function </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> was given, so do nothing (using </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;self._do_nothing&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.)&quot;</span>
+            <span class="p">)</span>
+            <span class="n">function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_nothing</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">winname</span><span class="o">=</span><span class="n">winname</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="mi">27</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)):</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="n">winname</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, akari-doichan.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

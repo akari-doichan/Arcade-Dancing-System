@@ -22,4 +22,13 @@ $ poetry install
 
 |Input|[MediaPipe](https://google.github.io/mediapipe/solutions/pose)|
 |:-:|:-:|
-|![input](data/sample.jpeg)|![output](data/sample_posed.jpeg)|                
+|![input](data/sample.jpeg)|![output](data/sample_posed.jpeg)|
+
+## Generate Documentations
+
+```sh
+# Format Python code in "ddrev" directory.
+$ ./docs-format.sh
+# Use "sphinx" to generate a documentation.
+$ ./docs-generate.sh
+```

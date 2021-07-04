@@ -3,6 +3,8 @@ from typing import Any, Dict, Tuple
 
 import cv2
 import mediapipe as mp
+import numpy as np
+import numpy.typing as npt
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -71,7 +73,7 @@ class mpPoseEstimator(mp_pose.Pose):
             color=color, thickness=thickness, circle_radius=circle_radius
         )
 
-    def process(self, frame, key, draw: bool = True):
+    def process(self, frame: npt.NDArray[np.uint8], key: int, draw: bool = True):
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = super().process(rgb)
         self._landmarks = results.pose_landmarks

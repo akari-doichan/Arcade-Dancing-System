@@ -18,6 +18,9 @@ ipykernel = "^5.5.5"
 flake8 = "^3.9.2"
 isort = "^5.9.1"
 black = "^21.6b0"
+Sphinx = "^4.0.2"
+sphinxext-opengraph = "^0.4.2"
+sphinx-rtd-theme = "^0.5.2"
 
 [tool.poetry.scripts]
 arcade-prepro = "ddrev.cli.preprocessing"
