@@ -6,14 +6,16 @@
 Welcome to Arcade Dance System's documentation!
 ===============================================
 
+Contents
+--------
+
 .. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+   :maxdepth: 5
 
-
+   ddrev
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

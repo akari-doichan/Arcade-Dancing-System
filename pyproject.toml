@@ -12,6 +12,8 @@ packages = [
 python = "^3.8"
 mediapipe = "^0.8.6"
 numpy = "^1.21.0"
+pydub = "^0.25.1"
+tqdm = "^4.61.1"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^5.5.5"
@@ -21,6 +23,7 @@ black = "^21.6b0"
 Sphinx = "^4.0.2"
 sphinxext-opengraph = "^0.4.2"
 sphinx-rtd-theme = "^0.5.2"
+sphinx-theme = "^1.0"
 
 [tool.poetry.scripts]
 arcade-prepro = "ddrev.cli.preprocessing"

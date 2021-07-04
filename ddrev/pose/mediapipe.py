@@ -1,5 +1,5 @@
 # coding: utf-8
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Optional
 
 import cv2
 import mediapipe as mp
@@ -73,11 +73,13 @@ class mpPoseEstimator(mp_pose.Pose):
             color=color, thickness=thickness, circle_radius=circle_radius
         )
 
-    def process(self, frame: npt.NDArray[np.uint8], key: int, draw: bool = True):
+    def process(self, frame: npt.NDArray[np.uint8], key: Optional[int] = None, inplace: bool = True, draw: bool = True):
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = super().process(rgb)
         self._landmarks = results.pose_landmarks
         if draw and self._landmarks:
+            if not inplace:
+                frame = frame.copy()
             mp_drawing.draw_landmarks(
                 image=frame,
                 landmark_list=self._landmarks,

@@ -117,7 +117,7 @@ class VideoCapture(cv2.VideoCapture):
             key = cv2.waitKey(delay=delay)
             frame = function(frame, key)
             cv2.imshow(winname=winname, mat=frame)
-            if (key == 27) or (key == ord("q")):
+            if key in stop_keys:
                 break
         self.release()
         cv2.destroyWindow(winname)

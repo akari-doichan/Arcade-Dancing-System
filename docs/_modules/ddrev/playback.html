@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ddrev.playback &mdash; Arcade Dance System  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Arcade Dance System  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Arcade Dance System
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../ddrev.html">ddrev package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Arcade Dance System</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ddrev.playback</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ddrev.playback</h1><div class="highlight"><pre>
+<span></span><span class="c1">#coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
+<span class="kn">from</span> <span class="nn">pydub.playback</span> <span class="kn">import</span> <span class="n">play</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+
+<span class="kn">from</span> <span class="nn">.utils._colorings</span> <span class="kn">import</span> <span class="n">toRED</span>
+
+<div class="viewcode-block" id="PlayBack"><a class="viewcode-back" href="../../ddrev.playback.html#ddrev.playback.PlayBack">[docs]</a><span class="k">class</span> <span class="nc">PlayBack</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span> <span class="o">=</span> <span class="n">AudioSegment</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mp4&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">toRED</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The video could not be loaded properly. Please check the </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tm</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">TickMeter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">winname</span> <span class="o">=</span> <span class="s2">&quot;hoge&quot;</span>
+
+<div class="viewcode-block" id="PlayBack.play"><a class="viewcode-back" href="../../ddrev.playback.html#ddrev.playback.PlayBack.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+            <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tm</span><span class="o">.</span><span class="n">getTimeSec</span><span class="p">()</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">fps</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">window_name</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">):</span>
+                <span class="k">break</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fps</span><span class="p">():</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PlayBack.set_fps"><a class="viewcode-back" href="../../ddrev.playback.html#ddrev.playback.PlayBack.set_fps">[docs]</a>    <span class="k">def</span> <span class="nf">set_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fps</span><span class="p">:</span><span class="n">Number</span><span class="p">,</span> <span class="n">synchronize</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">fps</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">synchronize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PlayBack.synchronize"><a class="viewcode-back" href="../../ddrev.playback.html#ddrev.playback.PlayBack.synchronize">[docs]</a>    <span class="k">def</span> <span class="nf">synchronize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Synchronize the audio with current video fps.&quot;&quot;&quot;</span>
+        <span class="n">video_fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">_spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;frame_rate&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">video_fps</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">set_frame_rate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="o">.</span><span class="n">frame_rate</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, akari-doichan.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

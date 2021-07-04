@@ -17,6 +17,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   ddrev.playback
    ddrev.realtime
 
 Module contents
