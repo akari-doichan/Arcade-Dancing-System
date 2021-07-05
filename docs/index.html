@@ -9,7 +9,7 @@
   <meta property="og:title" content="Welcome to Arcade Dance System’s documentation!" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/index.html" />
-  <meta property="og:description" content="Contents: ddrev package- Subpackages- ddrev.poses package- Submodules- ddrev.poses.base module, ddrev.poses.mediapipe module., Module contents., ddrev.utils package- Submodules- ddrev.utils.json_ut..." />
+  <meta property="og:description" content="header GitHub version license Documentation icon A Novel Arcade dancing System. QuickStart: I recommend you to use these tools to avoid the chaos of the python environment. Pyenv is a python instal..." />
   <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png" />
   <meta property="og:image:alt" content="Welcome to Arcade Dance System’s documentation!" />
   <meta property="og:site_name" content="Python-Charmers" />
@@ -22,6 +22,8 @@
   
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   
 
   
@@ -163,6 +165,25 @@
             
   <div class="section" id="welcome-to-arcade-dance-system-s-documentation">
 <h1>Welcome to Arcade Dance System’s documentation!<a class="headerlink" href="#welcome-to-arcade-dance-system-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/akari-doichan/Arcade-Dancing-System"><img alt="header" class="full-width" src="_images/header.png" /></a> <a class="reference external" href="https://github.com/akari-doichan/Arcade-Dancing-System"><img alt="GitHub version" src="https://badge.fury.io/gh/akari-doichan%2FArcade-Dancing-System.svg" /></a> <a class="reference external" href="https://github.com/akari-doichan/Arcade-Dancing-System/blob/main/LICENSE"><img alt="license" src="https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000" /></a> <a class="reference external" href="https://akari-doichan.github.io/Arcade-Dancing-System/"><img alt="Documentation icon" src="https://img.shields.io/badge/documentation-Arcade--Dancing--System-eca3f5?style=flat-square" /></a></p>
+<p>A Novel Arcade dancing System.</p>
+<div class="section" id="quickstart">
+<h2>QuickStart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>I recommend you to use these tools to avoid the chaos of the python environment.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/pyenv/pyenv">Pyenv</a> is a python installation manager.</p></li>
+<li><p><a class="reference external" href="https://python-poetry.org/">Poetry</a> is a packaging and dependency manager.</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/akari-doichan/Arcade-Dancing-System.git
+$ <span class="nb">cd</span> Arcade-Dancing-System
+$ pyenv install <span class="m">3</span>.8.9
+$ pyenv <span class="nb">local</span> <span class="m">3</span>.8.9
+$ python -V
+Python <span class="m">3</span>.8.9
+$ poetry install
+</pre></div>
+</div>
+</div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -180,8 +201,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="ddrev.utils.html">ddrev.utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ddrev.utils.html#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="ddrev.utils.generic_utils.html">ddrev.utils.generic_utils module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="ddrev.utils.json_utils.html">ddrev.utils.json_utils module</a></li>
 <li class="toctree-l5"><a class="reference internal" href="ddrev.utils.score_utils.html">ddrev.utils.score_utils module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ddrev.utils.video_utils.html">ddrev.utils.video_utils module</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="ddrev.utils.html#module-ddrev.utils">Module contents</a></li>
@@ -192,6 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ddrev.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="ddrev.playback.html">ddrev.playback module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ddrev.realtime.html">ddrev.realtime module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ddrev.recorder.html">ddrev.recorder module</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ddrev.html#module-ddrev">Module contents</a></li>

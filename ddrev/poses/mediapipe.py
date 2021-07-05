@@ -182,7 +182,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             >>> fig.show()
         """
         landmarks = self.process(frame)
-        self.draw_landmarks(frame, landmarks=landmarks, inplace=inplace)
+        frame = self.draw_landmarks(frame, landmarks=landmarks, inplace=inplace)
         return frame
 
     def draw_landmarks(

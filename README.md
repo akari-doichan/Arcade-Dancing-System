@@ -1,5 +1,10 @@
 # Arcade Dancing System
 
+[![header](docs/_images/header.png)](https://github.com/akari-doichan/Arcade-Dancing-System)
+![Github version](https://badge.fury.io/gh/akari-doichan%2FArcade-Dancing-System.svg)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/akari-doichan/Arcade-Dancing-System/blob/main/LICENSE)
+[![Documentation Icon](https://img.shields.io/badge/documentation-Arcade--Dancing--System-eca3f5?style=flat-square)](https://akari-doichan.github.io/Arcade-Dancing-System/)
+
 A Novel Arcade dancing System.
 
 ## Installation

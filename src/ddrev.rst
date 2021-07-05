@@ -18,6 +18,7 @@ Submodules
 
    ddrev.playback
    ddrev.realtime
+   ddrev.recorder
 
 Module contents
 ---------------

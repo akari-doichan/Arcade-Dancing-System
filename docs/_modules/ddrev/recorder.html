@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ddrev.recorder &mdash; Arcade Dance System  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Arcade Dance System  documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Arcade Dance System
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../ddrev.html">ddrev package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Arcade Dance System</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ddrev.recorder</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ddrev.recorder</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">from</span> <span class="nn">.utils._colorings</span> <span class="kn">import</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
+<span class="kn">from</span> <span class="nn">.utils.generic_utils</span> <span class="kn">import</span> <span class="n">now_str</span>
+<span class="kn">from</span> <span class="nn">.utils.video_utils</span> <span class="kn">import</span> <span class="n">videocodec2ext</span>
+
+
+<div class="viewcode-block" id="copyVideoSpec"><a class="viewcode-back" href="../../ddrev.recorder.html#ddrev.recorder.copyVideoSpec">[docs]</a><span class="k">def</span> <span class="nf">copyVideoSpec</span><span class="p">(</span>
+    <span class="n">cap</span><span class="p">:</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">,</span>
+    <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MP4V&quot;</span><span class="p">,</span>
+    <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        cap (cv2.VideoCapture)             : An instance of ``cv2.VideoCapture``.</span>
+<span class="sd">        codec (str, optional)              : Video Codec. Defaults to ``&quot;MP4V&quot;``.</span>
+<span class="sd">        out_path (Optional[str], optional) : The path to which the ``cv2.VideoWriter`` writes video. Defaults to ``None``.</span>
+<span class="sd">        fps (Optional[float], optional)    : fps for the output video. Defaults to ``None``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[bool, cv2.VideoWrier, str] : Tuple of flag (whether ``cv2.VideoWriter`` is correctly created), ``cv2.VideoWriter``, and path to output video.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import time</span>
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; from tqdm import tqdm</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.realtime import VideoCapture</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.recorder import copyVideoSpec</span>
+<span class="sd">        &gt;&gt;&gt; cap = cv2.VideoCapture(1)</span>
+<span class="sd">        &gt;&gt;&gt; is_ok, out, out_path = copyVideoSpec(cap=cap, codec=&quot;MP4V&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; n = 100</span>
+<span class="sd">        &gt;&gt;&gt; digit = len(str(n))</span>
+<span class="sd">        &gt;&gt;&gt; if is_ok:</span>
+<span class="sd">        ...     s = time.time()</span>
+<span class="sd">        ...     for i in tqdm(range(n), desc=&quot;Recording&quot;):</span>
+<span class="sd">        ...         is_ok, frame = cap.read()</span>
+<span class="sd">        ...         cv2.putText(</span>
+<span class="sd">        ...             img=frame,</span>
+<span class="sd">        ...             text=f&quot;{i+1:&gt;0{digit}}/{n}&quot;,</span>
+<span class="sd">        ...             org=(10, 50),</span>
+<span class="sd">        ...             fontFace=cv2.FONT_HERSHEY_PLAIN,</span>
+<span class="sd">        ...             fontScale=3,</span>
+<span class="sd">        ...             color=(255, 255, 255),</span>
+<span class="sd">        ...         )</span>
+<span class="sd">        ...         out.write(frame)</span>
+<span class="sd">        ...     out.set(cv2.CAP_PROP_FPS, (time.time() - s) / n)</span>
+<span class="sd">        ...     out.release()</span>
+<span class="sd">        ...     print(f&quot;Captured video was saved at {out_path}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">))</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">))</span>
+    <span class="n">fps</span> <span class="o">=</span> <span class="n">fps</span> <span class="ow">or</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+    <span class="n">fourcc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="n">codec</span><span class="p">)</span>
+    <span class="n">ideal_ext</span> <span class="o">=</span> <span class="n">videocodec2ext</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">now_str</span><span class="p">()</span> <span class="o">+</span> <span class="n">ideal_ext</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">root</span><span class="p">,</span> <span class="n">original_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">original_ext</span> <span class="o">!=</span> <span class="n">ideal_ext</span><span class="p">:</span>
+            <span class="n">root</span><span class="p">,</span> <span class="n">original_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Change the file extension from </span><span class="si">{</span><span class="n">toRED</span><span class="p">(</span><span class="n">original_ext</span><span class="p">)</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">ideal_ext</span><span class="p">)</span><span class="si">}</span><span class="s2"> according to video codec (</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">codec</span><span class="p">)</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+            <span class="n">out_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="n">ideal_ext</span>
+    <span class="n">VideoWriter</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="n">fourcc</span><span class="p">,</span> <span class="n">fps</span><span class="p">,</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">))</span>
+    <span class="n">is_ok</span> <span class="o">=</span> <span class="n">VideoWriter</span><span class="o">.</span><span class="n">isOpened</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ok</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="n">toRED</span><span class="p">(</span>
+                <span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">        Could not make a typing video because VideoWriter was not created successfully.\n\</span>
+<span class="sd">        Look at the warning text from OpenCV above and do what you need to do.\n\</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">is_ok</span><span class="p">,</span> <span class="n">VideoWriter</span><span class="p">,</span> <span class="n">out_path</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, akari-doichan.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

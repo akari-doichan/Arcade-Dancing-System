@@ -7,8 +7,10 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   ddrev.utils.generic_utils
    ddrev.utils.json_utils
    ddrev.utils.score_utils
+   ddrev.utils.video_utils
 
 Module contents
 ---------------
