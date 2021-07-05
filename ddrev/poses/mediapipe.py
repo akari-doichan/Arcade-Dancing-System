@@ -1,17 +1,21 @@
 # coding: utf-8
-from typing import Any, Dict, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
 
 import cv2
 import mediapipe as mp
 import numpy as np
 import numpy.typing as npt
+from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmarkList
+
+from ..utils._exceptions import KeyError
+from .base import BasePoseEstimator
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
 
-class mpPoseEstimator(mp_pose.Pose):
-    """[summary]
+class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
+    """MediaPipe Pose Estimation Model
 
     Args:
         static_image_mode (bool, optional) : [description]. Defaults to ``False``.
@@ -19,6 +23,9 @@ class mpPoseEstimator(mp_pose.Pose):
         smooth_landmarks (bool, optional) : [description]. Defaults to ``True``.
         min_detection_confidence (float, optional) : [description]. Defaults to ``0.5``.
         min_tracking_confidence (float, optional) : [description]. Defaults to ``0.5``.
+
+    Attributes:
+        landmarks (NormalizedLandmarkList) : Pose landmarks as a result of the most recent :meth:`process <ddrev.pose.mediapipe.process>`
     """
 
     def __init__(
@@ -73,22 +80,68 @@ class mpPoseEstimator(mp_pose.Pose):
             color=color, thickness=thickness, circle_radius=circle_radius
         )
 
-    def process(self, frame: npt.NDArray[np.uint8], key: Optional[int] = None, inplace: bool = True, draw: bool = True):
-        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = super().process(rgb)
-        self._landmarks = results.pose_landmarks
-        if draw and self._landmarks:
-            if not inplace:
-                frame = frame.copy()
-            mp_drawing.draw_landmarks(
-                image=frame,
-                landmark_list=self._landmarks,
-                connections=mp_pose.POSE_CONNECTIONS,
-                landmark_drawing_spec=self.landmark_drawing_spec,
-                connection_drawing_spec=self.connection_drawing_spec,
-            )
+    def process(self, frame: npt.NDArray[np.uint8]) -> NormalizedLandmarkList:
+        """Do Pose-Estimation.
+
+        Args:
+            frame (npt.NDArray[np.uint8]): A three channel ``BGR`` image represented as numpy ndarray.
+
+        Returns:
+            NormalizedLandmarkList: Pose Estimation Landmarks.
+        """
+        return super().process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)).pose_landmarks
+
+    def process_frame(
+        self, frame: npt.NDArray[np.uint8], key: int = -1, **kwargs
+    ) -> npt.NDArray[np.uint8]:
+        """Process frame in while-loop in :meth:`realtime_process <ddrev.realtime.VideoCapture.realtime_process>`
+
+        Args:
+            frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.
+            key (int, optional)           : An integer representing the Unicode character. Defaults to ``1``.
+
+        Returns:
+            npt.NDArray[np.uint8]: An edited (drawn ``landmarks``) frame.
+        """
+        landmarks = self.process(frame)
+        self.draw_landmarks(frame, landmarks=landmarks, inplace=True)
         return frame
 
-    @property
-    def landmarks(self):
-        return self._landmarks
+    def draw_landmarks(
+        self,
+        frame: npt.NDArray[np.uint8],
+        landmarks: NormalizedLandmarkList,
+        inplace: bool = True,
+    ) -> npt.NDArray[np.uint8]:
+        """Draws the landmarks and the connections on the image.
+
+        Args:
+            frame (npt.NDArray[np.uint8])      : A three channel ``RGB`` image represented as numpy ndarray.
+            landmarks (NormalizedLandmarkList) : A normalized landmark list proto message to be annotated on the image.
+            inplace (bool, optional)           : Whether frame is edited (drawn ``landmarks``) in place. Defaults to ``True``.
+
+        Returns:
+            npt.NDArray[np.uint8]: An edited (drawn ``landmarks``) frame.
+        """
+        if not inplace:
+            frame = frame.copy()
+        mp_drawing.draw_landmarks(
+            image=frame,
+            landmark_list=landmarks,
+            connections=mp_pose.POSE_CONNECTIONS,
+            landmark_drawing_spec=self.landmark_drawing_spec,
+            connection_drawing_spec=self.connection_drawing_spec,
+        )
+        return frame
+
+    @staticmethod
+    def landmarks2string(
+        landmarks: NormalizedLandmarkList, encoding: str = "latin-1"
+    ) -> str:
+        return landmarks.SerializeToString().decode(encoding)
+
+    @staticmethod
+    def string2landmarks(
+        string: str, encoding: str = "latin-1"
+    ) -> NormalizedLandmarkList:
+        return NormalizedLandmarkList.FromString(string.encode(encoding))
