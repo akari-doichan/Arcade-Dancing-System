@@ -1,8 +1,12 @@
 # coding: utf-8
-"""PoseEstimation MediaPipe
+"""Pose Estimation using ``mediapipe``.
 
 - GitHub: https://github.com/google/mediapipe
-- Home Page: https://google.github.io/mediapipe/
+- Documentation: https://google.github.io/mediapipe/
+
+The landmark model in MediaPipe Pose predicts the location of 33 pose landmarks (see figure from documentation below).
+
+.. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png
 """
 from typing import Any, Dict, Optional, Tuple
 
@@ -137,7 +141,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         inplace: bool = True,
         **kwargs
     ) -> npt.NDArray[np.uint8]:
-        """Process frame in while-loop in :meth:`realtime_process <ddrev.realtime.VideoCapture.realtime_process>`
+        """Process frame in while-loop in :meth:`realtime_process <ddrev.realtime.VideoCapture.realtime_process>`.
 
         Args:
             frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.

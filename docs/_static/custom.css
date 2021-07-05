@@ -1,0 +1,3 @@
+table.highlighttable td.linenos, div.doctest > div.highlight span.gp {
+  user-select: none;
+}

@@ -15,7 +15,7 @@ class BasePoseEstimator(ABC):
     def process_frame(
         self, frame: npt.NDArray[np.uint8], key: int = 1, **kwargs
     ) -> npt.NDArray[np.uint8]:
-        """[summary]
+        """Process frame in while-loop in :meth:`realtime_process <ddrev.realtime.VideoCapture.realtime_process>`.
 
         Args:
             frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.

@@ -32,6 +32,8 @@
   
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
 
   
         <link rel="index" title="Index"
@@ -153,10 +155,14 @@
             
   <h1>Source code for ddrev.poses.mediapipe</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="sd">&quot;&quot;&quot;PoseEstimation MediaPipe</span>
+<span class="sd">&quot;&quot;&quot;Pose Estimation using ``mediapipe``.</span>
 
 <span class="sd">- GitHub: https://github.com/google/mediapipe</span>
-<span class="sd">- Home Page: https://google.github.io/mediapipe/</span>
+<span class="sd">- Documentation: https://google.github.io/mediapipe/</span>
+
+<span class="sd">The landmark model in MediaPipe Pose predicts the location of 33 pose landmarks (see figure from documentation below).</span>
+
+<span class="sd">.. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
@@ -291,7 +297,7 @@
         <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Process frame in while-loop in :meth:`realtime_process &lt;ddrev.realtime.VideoCapture.realtime_process&gt;`</span>
+        <span class="sd">&quot;&quot;&quot;Process frame in while-loop in :meth:`realtime_process &lt;ddrev.realtime.VideoCapture.realtime_process&gt;`.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.</span>
@@ -423,8 +429,7 @@
         &copy; Copyright 2021, akari-doichan.
 
     </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+  </div> 
 
 </footer>
 
