@@ -6,19 +6,19 @@
 <head>
   <meta charset="utf-8">
   
-  <meta property="og:title" content="ddrev.utils package" />
+  <meta property="og:title" content="ddrev.poses package" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.utils.html" />
-  <meta property="og:description" content="Submodules: ddrev.utils.json_utils module. Module contents:" />
+  <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.poses.html" />
+  <meta property="og:description" content="Submodules: ddrev.poses.base module, ddrev.poses.mediapipe module. Module contents:" />
   <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png" />
-  <meta property="og:image:alt" content="ddrev.utils package" />
+  <meta property="og:image:alt" content="ddrev.poses package" />
   <meta property="og:site_name" content="Python-Charmers" />
 <meta name="twitter:site" content="@cabernet_rock" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image:src" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ddrev.utils package &mdash; Arcade Dance System  documentation</title>
+  <title>ddrev.poses package &mdash; Arcade Dance System  documentation</title>
   
 
   
@@ -49,8 +49,8 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Arcade Dance System  documentation" href="index.html"/>
         <link rel="up" title="ddrev package" href="ddrev.html"/>
-        <link rel="next" title="ddrev.utils.json_utils module" href="ddrev.utils.json_utils.html"/>
-        <link rel="prev" title="ddrev.poses.mediapipe module" href="ddrev.poses.mediapipe.html"/> 
+        <link rel="next" title="ddrev.poses.base module" href="ddrev.poses.base.html"/>
+        <link rel="prev" title="ddrev.evaluations.distance module" href="ddrev.evaluations.distance.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -100,12 +100,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="ddrev.html">ddrev package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="ddrev.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ddrev.evaluations.html">ddrev.evaluations package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ddrev.poses.html">ddrev.poses package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ddrev.utils package</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ddrev.poses package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-ddrev.utils">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ddrev.poses">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ddrev.utils.html">ddrev.utils package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ddrev.html#submodules">Submodules</a></li>
@@ -158,13 +158,13 @@
         
           <li><a href="ddrev.html">ddrev package</a> &raquo;</li>
         
-      <li>ddrev.utils package</li>
+      <li>ddrev.poses package</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/ddrev.utils.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/ddrev.poses.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -177,18 +177,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ddrev-utils-package">
-<h1>ddrev.utils package<a class="headerlink" href="#ddrev-utils-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ddrev-poses-package">
+<h1>ddrev.poses package<a class="headerlink" href="#ddrev-poses-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="ddrev.utils.json_utils.html">ddrev.utils.json_utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddrev.poses.base.html">ddrev.poses.base module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddrev.poses.mediapipe.html">ddrev.poses.mediapipe module</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="module-ddrev.utils">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ddrev.utils" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-ddrev.poses">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ddrev.poses" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ddrev.poses.get">
+<span class="sig-prename descclassname"><span class="pre">ddrev.poses.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="ddrev.poses.base.html#ddrev.poses.base.BasePoseEstimator" title="ddrev.poses.base.BasePoseEstimator"><span class="pre">ddrev.poses.base.BasePoseEstimator</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="ddrev.poses.base.html#ddrev.poses.base.BasePoseEstimator" title="ddrev.poses.base.BasePoseEstimator"><span class="pre">ddrev.poses.base.BasePoseEstimator</span></a><a class="reference internal" href="_modules/ddrev/poses.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a Pose Estimator using an identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="ddrev.poses.base.html#ddrev.poses.base.BasePoseEstimator" title="ddrev.poses.base.BasePoseEstimator"><em>BasePoseEstimator</em></a><em>]</em>) – An identifier for Pose Estimator.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>KeyError</strong> – When your specified model is not supported.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An instance of Pose Estimator</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="ddrev.poses.base.html#ddrev.poses.base.BasePoseEstimator" title="ddrev.poses.base.BasePoseEstimator">BasePoseEstimator</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev</span> <span class="kn">import</span> <span class="n">poses</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses</span> <span class="kn">import</span> <span class="n">BasePoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">poses</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mediapipe&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">BasePoseEstimator</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 </div>
 
@@ -199,10 +228,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ddrev.utils.json_utils.html" class="btn btn-neutral float-right" title="ddrev.utils.json_utils module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ddrev.poses.base.html" class="btn btn-neutral float-right" title="ddrev.poses.base module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ddrev.poses.mediapipe.html" class="btn btn-neutral" title="ddrev.poses.mediapipe module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ddrev.evaluations.distance.html" class="btn btn-neutral" title="ddrev.evaluations.distance module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

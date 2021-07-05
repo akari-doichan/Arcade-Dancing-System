@@ -1,4 +1,4 @@
-ddrev.utils package
+ddrev.poses package
 ===================
 
 Submodules
@@ -7,12 +7,13 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   ddrev.utils.json_utils
+   ddrev.poses.base
+   ddrev.poses.mediapipe
 
 Module contents
 ---------------
 
-.. automodule:: ddrev.utils
+.. automodule:: ddrev.poses
    :members:
    :undoc-members:
    :show-inheritance:

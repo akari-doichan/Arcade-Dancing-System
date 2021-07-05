@@ -1,6 +1,14 @@
 ddrev.utils package
 ===================
 
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   ddrev.utils.json_utils
+
 Module contents
 ---------------
 
