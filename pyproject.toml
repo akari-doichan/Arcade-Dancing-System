@@ -26,7 +26,7 @@ sphinx-rtd-theme = "^0.5.2"
 sphinx-theme = "^1.0"
 
 [tool.poetry.scripts]
-arcade-prepro = "ddrev.cli.preprocessing"
+video2landmarks = "ddrev.cli.video2landmarks:video2landmarks"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
