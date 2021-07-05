@@ -164,7 +164,7 @@
 
 <span class="sd">.. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">mediapipe</span> <span class="k">as</span> <span class="nn">mp</span>
@@ -173,10 +173,13 @@
 <span class="kn">from</span> <span class="nn">mediapipe.framework.formats.landmark_pb2</span> <span class="kn">import</span> <span class="n">NormalizedLandmarkList</span>
 
 <span class="kn">from</span> <span class="nn">..utils._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
+<span class="kn">from</span> <span class="nn">..utils.score_utils</span> <span class="kn">import</span> <span class="n">calculate_angle</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BasePoseEstimator</span>
 
 <span class="n">mp_drawing</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span>
 <span class="n">mp_pose</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">pose</span>
+
+<span class="n">VISIBILITY_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 
 <div class="viewcode-block" id="mpPoseEstimator"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator">[docs]</a><span class="k">class</span> <span class="nc">mpPoseEstimator</span><span class="p">(</span><span class="n">mp_pose</span><span class="o">.</span><span class="n">Pose</span><span class="p">,</span> <span class="n">BasePoseEstimator</span><span class="p">):</span>
@@ -195,6 +198,21 @@
 <span class="sd">        landmark_drawing_spec (mp_drawing.DrawingSpec)   : Drawing spec for landmarks.</span>
 <span class="sd">        connection_drawing_spec (mp_drawing.DrawingSpec) : Drawing spec for connections.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ANGLE_POINTS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">26</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">24</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">23</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">27</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">31</span><span class="p">],</span>
+    <span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -414,7 +432,48 @@
 <span class="sd">            ...     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))</span>
 <span class="sd">            &gt;&gt;&gt; fig.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">NormalizedLandmarkList</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">))</span></div></div>
+        <span class="k">return</span> <span class="n">NormalizedLandmarkList</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="mpPoseEstimator.calculate_angle"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.calculate_angle">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">calculate_angle</span><span class="p">(</span>
+        <span class="n">landmarks</span><span class="p">:</span> <span class="n">NormalizedLandmarkList</span><span class="p">,</span>
+        <span class="n">angle_points</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">unit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="s2">&quot;radian&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Calculate angles of each ``angle_points``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            landmarks (NormalizedLandmarkList)                 : Landmarks.</span>
+<span class="sd">            angle_points (Optional[List[List[int]]], optional) : [description]. Defaults to ``None``.</span>
+<span class="sd">            unit (str, optional)                               : Unit of Angle. Defaults to ``&quot;radian&quot;``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[float]: A list of ``3`` points for which you want to calculate the angle.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; import cv2</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
+<span class="sd">            &gt;&gt;&gt; img = cv2.imread(&quot;/path/to/img.jpg&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
+<span class="sd">            &gt;&gt;&gt; landmarks = estimator.process(img)</span>
+<span class="sd">            &gt;&gt;&gt; angles = estimator.calculate_angle(landmarks)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">angle_points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">angle_points</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="o">.</span><span class="n">ANGLE_POINTS</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">angle_points</span><span class="p">)</span>
+        <span class="n">landmark</span> <span class="o">=</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">landmark</span>
+        <span class="k">if</span> <span class="n">landmark</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">angles</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">points</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">angle_points</span><span class="p">):</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">landmark</span><span class="p">[</span><span class="n">point</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">visibility</span> <span class="o">&lt;</span> <span class="n">VISIBILITY_THRESHOLD</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">angles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="o">*</span><span class="n">coords</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">angles</span></div></div>
 </pre></div>
 
            </div>

@@ -3,8 +3,7 @@ import warnings
 from numbers import Number
 
 import cv2
-from pydub import AudioSegment
-from pydub.playback import play
+from pydub import AudioSegment, playback
 
 from .utils._colorings import toGREEN, toRED
 
@@ -25,7 +24,7 @@ class PlayBack:
         self.winname = "hoge"
 
     def play(self):
-        play(self.audio)
+        playback.play(self.audio)
         while self.cap.isOpened():
             is_ok, frame = self.cap.read()
             if (not is_ok) or (frame is None):

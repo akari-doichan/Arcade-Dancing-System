@@ -8,6 +8,7 @@ Submodules
    :maxdepth: 4
 
    ddrev.utils.json_utils
+   ddrev.utils.score_utils
 
 Module contents
 ---------------

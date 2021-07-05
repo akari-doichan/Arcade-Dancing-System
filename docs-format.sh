@@ -17,11 +17,11 @@ cd $HERE
 whereIam
 
 # flake8
-logging "poetry run flake8 ${MODULE_DIRNAME} --count --select=E9,F63,F7,F82 --show-source --statistics"	
+logging "$ poetry run flake8 ${MODULE_DIRNAME} --count --select=E9,F63,F7,F82 --show-source --statistics"	
 poetry run flake8 $MODULE_DIRNAME --count --select=E9,F63,F7,F82 --show-source --statistics
 # isort
-logging "poetry run isort ${MODULE_DIRNAME}"
+logging "$ poetry run isort ${MODULE_DIRNAME}"
 poetry run isort $MODULE_DIRNAME
 # black
-logging "poetry run black ${MODULE_DIRNAME}"
+logging "$ poetry run black ${MODULE_DIRNAME}"
 poetry run black $MODULE_DIRNAME

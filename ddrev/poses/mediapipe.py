@@ -8,7 +8,7 @@ The landmark model in MediaPipe Pose predicts the location of 33 pose landmarks 
 
 .. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png
 """
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import cv2
 import mediapipe as mp
@@ -17,10 +17,13 @@ import numpy.typing as npt
 from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmarkList
 
 from ..utils._exceptions import KeyError
+from ..utils.score_utils import calculate_angle
 from .base import BasePoseEstimator
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
+
+VISIBILITY_THRESHOLD = 0.5
 
 
 class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
@@ -39,6 +42,21 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         landmark_drawing_spec (mp_drawing.DrawingSpec)   : Drawing spec for landmarks.
         connection_drawing_spec (mp_drawing.DrawingSpec) : Drawing spec for connections.
     """
+
+    ANGLE_POINTS: List[List[int]] = [
+        [18, 16, 14],
+        [16, 14, 12],
+        [14, 12, 24],
+        [12, 24, 26],
+        [24, 26, 28],
+        [26, 28, 32],
+        [17, 15, 13],
+        [15, 13, 11],
+        [13, 11, 23],
+        [11, 23, 25],
+        [23, 25, 27],
+        [25, 27, 31],
+    ]
 
     def __init__(
         self,
@@ -259,3 +277,44 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             >>> fig.show()
         """
         return NormalizedLandmarkList.FromString(string.encode(encoding))
+
+    @staticmethod
+    def calculate_angle(
+        landmarks: NormalizedLandmarkList,
+        angle_points: Optional[List[List[int]]] = None,
+        unit: bool = "radian",
+    ) -> List[float]:
+        """Calculate angles of each ``angle_points``.
+
+        Args:
+            landmarks (NormalizedLandmarkList)                 : Landmarks.
+            angle_points (Optional[List[List[int]]], optional) : [description]. Defaults to ``None``.
+            unit (str, optional)                               : Unit of Angle. Defaults to ``"radian"``.
+
+        Returns:
+            List[float]: A list of ``3`` points for which you want to calculate the angle.
+
+        Examples:
+            >>> import cv2
+            >>> from ddrev.poses.mediapipe import mpPoseEstimator
+            >>> img = cv2.imread("/path/to/img.jpg")
+            >>> estimator = mpPoseEstimator()
+            >>> landmarks = estimator.process(img)
+            >>> angles = estimator.calculate_angle(landmarks)
+        """
+        if angle_points is None:
+            angle_points = mpPoseEstimator.ANGLE_POINTS
+        angles = [0.0] * len(angle_points)
+        landmark = landmarks.landmark
+        if landmark is None:
+            return angles
+        for i, points in enumerate(angle_points):
+            coords = []
+            for point in points:
+                p = landmark[point]
+                if p.visibility < VISIBILITY_THRESHOLD:
+                    break
+                coords.append(np.asarray([p.x, p.y, p.z]))
+            if len(coords) == 3:
+                angles[i] = calculate_angle(*coords, unit=unit)
+        return angles

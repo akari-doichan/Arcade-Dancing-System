@@ -101,7 +101,6 @@
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="ddrev.html">ddrev package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="ddrev.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ddrev.evaluations.html">ddrev.evaluations package</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="ddrev.poses.html">ddrev.poses package</a><ul class="current">
 <li class="toctree-l4 current"><a class="reference internal" href="ddrev.poses.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ddrev.poses.html#module-ddrev.poses">Module contents</a></li>
@@ -229,6 +228,11 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.ANGLE_POINTS">
+<span class="sig-name descname"><span class="pre">ANGLE_POINTS</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">[[18,</span> <span class="pre">16,</span> <span class="pre">14],</span> <span class="pre">[16,</span> <span class="pre">14,</span> <span class="pre">12],</span> <span class="pre">[14,</span> <span class="pre">12,</span> <span class="pre">24],</span> <span class="pre">[12,</span> <span class="pre">24,</span> <span class="pre">26],</span> <span class="pre">[24,</span> <span class="pre">26,</span> <span class="pre">28],</span> <span class="pre">[26,</span> <span class="pre">28,</span> <span class="pre">32],</span> <span class="pre">[17,</span> <span class="pre">15,</span> <span class="pre">13],</span> <span class="pre">[15,</span> <span class="pre">13,</span> <span class="pre">11],</span> <span class="pre">[13,</span> <span class="pre">11,</span> <span class="pre">23],</span> <span class="pre">[11,</span> <span class="pre">23,</span> <span class="pre">25],</span> <span class="pre">[23,</span> <span class="pre">25,</span> <span class="pre">27],</span> <span class="pre">[25,</span> <span class="pre">27,</span> <span class="pre">31]]</span></em><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.ANGLE_POINTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec">
@@ -427,6 +431,36 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">img</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">image</span><span class="p">,</span> <span class="n">image_edited</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.calculate_angle">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">calculate_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">mediapipe.framework.formats.landmark_pb2.NormalizedLandmarkList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_points</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'radian'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.calculate_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.calculate_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate angles of each <code class="docutils literal notranslate"><span class="pre">angle_points</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>landmarks</strong> (<em>NormalizedLandmarkList</em>) – Landmarks.</p></li>
+<li><p><strong>angle_points</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>unit</strong> (<em>str</em><em>, </em><em>optional</em>) – Unit of Angle. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;radian&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of <code class="docutils literal notranslate"><span class="pre">3</span></code> points for which you want to calculate the angle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;/path/to/img.jpg&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">angles</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">calculate_angle</span><span class="p">(</span><span class="n">landmarks</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

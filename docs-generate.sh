@@ -33,11 +33,11 @@ fi
 logging "$ sphinx-apidoc -f -e -o $SRC_DIRNAME $MODULE_DIRNAME"	
 poetry run sphinx-apidoc -f -e -o $SRC_DIRNAME $MODULE_DIRNAME	
 
-logging "cd $SRC_DIRNAME"	
+logging "$ cd $SRC_DIRNAME"	
 cd $SRC_DIRNAME	
 whereIam	
 
-logging "make html"	
+logging "$ make html"	
 make html	
-logging "mv $CREATED_DIRNAME ../$DOC_DIRNAME"	
+logging "$ mv $CREATED_DIRNAME ../$DOC_DIRNAME"	
 mv $CREATED_DIRNAME ../$DOC_DIRNAME

@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   ddrev.evaluations
    ddrev.poses
    ddrev.utils
 

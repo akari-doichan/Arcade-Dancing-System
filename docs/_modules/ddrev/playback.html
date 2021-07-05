@@ -157,8 +157,7 @@
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span>
-<span class="kn">from</span> <span class="nn">pydub.playback</span> <span class="kn">import</span> <span class="n">play</span>
+<span class="kn">from</span> <span class="nn">pydub</span> <span class="kn">import</span> <span class="n">AudioSegment</span><span class="p">,</span> <span class="n">playback</span>
 
 <span class="kn">from</span> <span class="nn">.utils._colorings</span> <span class="kn">import</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
 
@@ -179,7 +178,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">winname</span> <span class="o">=</span> <span class="s2">&quot;hoge&quot;</span>
 
 <div class="viewcode-block" id="PlayBack.play"><a class="viewcode-back" href="../../ddrev.playback.html#ddrev.playback.PlayBack.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">)</span>
+        <span class="n">playback</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">)</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
             <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
