@@ -9,6 +9,7 @@
   <meta property="og:title" content="ddrev.poses.mediapipe module" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.poses.mediapipe.html" />
+  <meta property="og:description" content="PoseEstimation MediaPipe GitHub: https://github.com/google/mediapipe, Home Page: https://google.github.io/mediapipe/." />
   <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png" />
   <meta property="og:image:alt" content="ddrev.poses.mediapipe module" />
   <meta property="og:site_name" content="Python-Charmers" />
@@ -180,6 +181,11 @@
             
   <div class="section" id="module-ddrev.poses.mediapipe">
 <span id="ddrev-poses-mediapipe-module"></span><h1>ddrev.poses.mediapipe module<a class="headerlink" href="#module-ddrev.poses.mediapipe" title="Permalink to this headline">¶</a></h1>
+<p>PoseEstimation MediaPipe</p>
+<ul class="simple">
+<li><p>GitHub: <a class="reference external" href="https://github.com/google/mediapipe">https://github.com/google/mediapipe</a></p></li>
+<li><p>Home Page: <a class="reference external" href="https://google.github.io/mediapipe/">https://google.github.io/mediapipe/</a></p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ddrev.poses.mediapipe.</span></span><span class="sig-name descname"><span class="pre">mpPoseEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">static_image_mode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_complexity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_landmarks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_detection_confidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_tracking_confidence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landmark_drawing_specs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_drawing_specs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator" title="Permalink to this definition">¶</a></dt>
@@ -188,21 +194,34 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>static_image_mode</strong> (<em>bool</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>model_complexity</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
-<li><p><strong>smooth_landmarks</strong> (<em>bool</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>min_detection_confidence</strong> (<em>float</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p></li>
-<li><p><strong>min_tracking_confidence</strong> (<em>float</em><em>, </em><em>optional</em>) – [description]. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p></li>
+<li><p><strong>static_image_mode</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to treat the input images as a batch of static and possibly unrelated images, or a video stream. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>model_complexity</strong> (<em>int</em><em>, </em><em>optional</em>) – Complexity of the pose landmark model: <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p><strong>smooth_landmarks</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to filter landmarks across different input images to reduce jitter. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>min_detection_confidence</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum confidence value <code class="docutils literal notranslate"><span class="pre">([0.0,</span> <span class="pre">1.0])</span></code> for person detection to be considered successful. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p></li>
+<li><p><strong>min_tracking_confidence</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum confidence value <code class="docutils literal notranslate"><span class="pre">([0.0,</span> <span class="pre">1.0])</span></code> for the pose landmarks to be considered tracked successfully. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p></li>
+<li><p><strong>landmark_drawing_specs</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Keyword Arguments for <a class="reference internal" href="#ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec" title="ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_landmark_drawing_spec</span></code></a>. Defaults to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
+<li><p><strong>connection_drawing_specs</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Keyword Arguments for <a class="reference internal" href="#ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec" title="ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_connection_drawing_spec</span></code></a>. Defaults to <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.landmarks">
-<span class="sig-name descname"><span class="pre">landmarks</span></span><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.landmarks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pose landmarks as a result of the most recent <code class="xref py py-meth docutils literal notranslate"><span class="pre">process</span></code></p>
+<dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.landmark_drawing_spec">
+<span class="sig-name descname"><span class="pre">landmark_drawing_spec</span></span><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.landmark_drawing_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drawing spec for landmarks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>NormalizedLandmarkList</p>
+<dd class="field-odd"><p>mp_drawing.DrawingSpec</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.connection_drawing_spec">
+<span class="sig-name descname"><span class="pre">connection_drawing_spec</span></span><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.connection_drawing_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drawing spec for connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>mp_drawing.DrawingSpec</p>
 </dd>
 </dl>
 </dd></dl>
@@ -210,12 +229,44 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec">
 <span class="sig-name descname"><span class="pre">set_landmark_drawing_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">255)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thickness</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circle_radius</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.set_landmark_drawing_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set a drawing spec for landmarks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Color for drawing the annotation. Defaults to red color; <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">255)</span></code>.</p></li>
+<li><p><strong>thickness</strong> (<em>int</em><em>, </em><em>optional</em>) – Thickness for drawing the annotation. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
+<li><p><strong>circle_radius</strong> (<em>int</em><em>, </em><em>optional</em>) – Circle radius. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span><span class="o">.</span><span class="n">set_landmark_drawing_spec</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">236</span><span class="p">,</span><span class="mi">163</span><span class="p">,</span><span class="mi">245</span><span class="p">),</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">circle_radius</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec">
 <span class="sig-name descname"><span class="pre">set_connection_drawing_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thickness</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circle_radius</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.set_connection_drawing_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set a drawing spec for landmarks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Color for drawing the annotation. Defaults to green color; <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">0)</span></code>.</p></li>
+<li><p><strong>thickness</strong> (<em>int</em><em>, </em><em>optional</em>) – Thickness for drawing the annotation. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
+<li><p><strong>circle_radius</strong> (<em>int</em><em>, </em><em>optional</em>) – Circle radius. Defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span><span class="o">.</span><span class="n">set_connection_drawing_spec</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">236</span><span class="p">,</span><span class="mi">163</span><span class="p">,</span><span class="mi">245</span><span class="p">),</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">circle_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.process">
@@ -232,17 +283,26 @@
 <dd class="field-odd"><p>NormalizedLandmarkList</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;sample.jpg&quot;</span><span class="p">)</span> <span class="c1"># BGR images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.process_frame">
-<span class="sig-name descname"><span class="pre">process_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.process_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.process_frame" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">process_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.process_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.process_frame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process frame in while-loop in <a class="reference internal" href="ddrev.realtime.html#ddrev.realtime.VideoCapture.realtime_process" title="ddrev.realtime.VideoCapture.realtime_process"><code class="xref py py-meth docutils literal notranslate"><span class="pre">realtime_process</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>frame</strong> (<em>npt.NDArray</em><em>[</em><em>np.uint8</em><em>]</em>) – A three channel <code class="docutils literal notranslate"><span class="pre">BGR</span></code> image represented as numpy ndarray.</p></li>
 <li><p><strong>key</strong> (<em>int</em><em>, </em><em>optional</em>) – An integer representing the Unicode character. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether frame is edited (drawn <code class="docutils literal notranslate"><span class="pre">landmarks</span></code>) in place. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -252,6 +312,19 @@
 <dd class="field-odd"><p>npt.NDArray[np.uint8]</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;sample.jpg&quot;</span><span class="p">)</span> <span class="c1"># BGR images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image_edited</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">process_frame</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">img</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">image</span><span class="p">,</span> <span class="n">image_edited</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -273,17 +346,86 @@
 <dd class="field-odd"><p>npt.NDArray[np.uint8]</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;sample.jpg&quot;</span><span class="p">)</span> <span class="c1"># BGR images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image_edited</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">landmarks</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">img</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">image</span><span class="p">,</span> <span class="n">image_edited</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.landmarks2string">
 <em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">landmarks2string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">landmarks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">mediapipe.framework.formats.landmark_pb2.NormalizedLandmarkList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'latin-1'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.landmarks2string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.landmarks2string" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convert from landmarks (<code class="docutils literal notranslate"><span class="pre">NormalizedLandmarkList</span></code>) to a string (<code class="docutils literal notranslate"><span class="pre">str</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>landmarks</strong> (<em>NormalizedLandmarkList</em>) – Landmarks.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – The encoding with which to decode the bytes. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;latin-1&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;sample.jpg&quot;</span><span class="p">)</span> <span class="c1"># BGR images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks_str</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">landmarks2string</span><span class="p">(</span><span class="n">landmarks</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">landmarks_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ddrev.poses.mediapipe.mpPoseEstimator.string2landmarks">
 <em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">string2landmarks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'latin-1'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">mediapipe.framework.formats.landmark_pb2.NormalizedLandmarkList</span><a class="reference internal" href="_modules/ddrev/poses/mediapipe.html#mpPoseEstimator.string2landmarks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.poses.mediapipe.mpPoseEstimator.string2landmarks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convert from a string (<code class="docutils literal notranslate"><span class="pre">str</span></code>) to landmarks (<code class="docutils literal notranslate"><span class="pre">NormalizedLandmarkList</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>str</em>) – A string.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – The encoding in which to encode the string. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;latin-1&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Landmarks.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NormalizedLandmarkList</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.poses.mediapipe</span> <span class="kn">import</span> <span class="n">mpPoseEstimator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;landmarks.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">landmarks_str</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;sample.jpg&quot;</span><span class="p">)</span> <span class="c1"># BGR images</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">string2landmarks</span><span class="p">(</span><span class="n">landmarks_str</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image_edited</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">landmarks</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">img</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">image</span><span class="p">,</span> <span class="n">image_edited</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 
