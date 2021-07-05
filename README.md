@@ -21,7 +21,7 @@ $ poetry install
 
 |Input|[MediaPipe](https://google.github.io/mediapipe/solutions/pose)|
 |:-:|:-:|
-|![input](data/sample.jpeg)|![output](data/sample_posed.jpeg)|
+|![input](data/sample.jpeg)|![output](data/sample_mpposed.jpeg)|
 
 ### Command Line
 
