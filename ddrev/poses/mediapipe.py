@@ -305,9 +305,9 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         if angle_points is None:
             angle_points = mpPoseEstimator.ANGLE_POINTS
         angles = [0.0] * len(angle_points)
-        landmark = landmarks.landmark
-        if landmark is None:
+        if (landmarks is None) or (not hasattr(landmarks, "landmark")):
             return angles
+        landmark = landmarks.landmark
         for i, points in enumerate(angle_points):
             coords = []
             for point in points:

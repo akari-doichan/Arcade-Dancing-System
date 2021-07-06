@@ -35,7 +35,17 @@ You can easily do some process by executing the following command.
 #### Covert from Video to Landmarks
 
 ```sh
-$ poetry run video2landmarks --video data/sample-instructor.mp4
+$ poetry run video2landmarks -V data/sample-instructor.mp4 \
+                             --model mediapipe \
+                             --score-method angle         -
+```
+
+#### Realtime dance with instructor's video
+
+```sh
+$ poetry run arcade-dance -V data/sample-instructor_mediapipe_angle.json \
+                          --codec MP4V \
+                          --record H264
 ```
 
 ## Generate Documentations

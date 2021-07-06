@@ -27,6 +27,7 @@ sphinx-theme = "^1.0"
 
 [tool.poetry.scripts]
 video2landmarks = "ddrev.cli.video2landmarks:video2landmarks"
+arcade-dance    = "ddrev.cli.arcade_dance:arcade_dance"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

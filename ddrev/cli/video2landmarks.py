@@ -25,7 +25,9 @@ def video2landmarks(argv=sys.argv[1:]):
     NOTE:
         When you run from the command line, execute as follows::
 
-        $ video2landmarks -V path/to/video.mp4 --model mediapipe --score-method angle
+        $ video2landmarks -V path/to/video.mp4 \\
+                          --model mediapipe \\
+                          --score-method angle
     """
     parser = argparse.ArgumentParser(
         prog="video2landmarks",
@@ -77,6 +79,7 @@ def video2landmarks(argv=sys.argv[1:]):
         "height": height,
         "frame_count": frame_count,
         "fps": cap.get(cv2.CAP_PROP_FPS),
+        "score_method": score_method,
     }
     for k, v in data.items():
         print(f"* {k}: {toGREEN(k)}")
@@ -86,6 +89,7 @@ def video2landmarks(argv=sys.argv[1:]):
     estimator = poses.get(identifier=model)
     if score_method == "angle":
         data["angle_points"] = estimator.ANGLE_POINTS
+        data["angle_unit"] = angle_unit
 
     # Collect Landmarks information for each frame in video.
     landmarks = []
