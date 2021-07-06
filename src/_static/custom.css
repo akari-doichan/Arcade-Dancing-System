@@ -1,6 +1,46 @@
+/**
+ * Custom CSS for https://akari-doichan.github.io/Arcade-Dancing-System/
+ *
+ * Copyright : MIT, 2021 iwasakishuto
+ * Twitter : https://twitter.com/cabernet_rock
+ * Github : https://github.com/iwasakishuto
+ * 
+*/
 table.highlighttable td.linenos, div.doctest > div.highlight span.gp {
   user-select: none;
 }
 img.full-width {
   width: 100%;
+}
+/*  */
+div.toctree-wrapper.compound {
+  color: white;
+  background-color: #343131;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+.rst-content div.toctree-wrapper ul{
+  margin-bottom: 0;
+}
+div.toctree-wrapper.compound a {
+  color: white;
+}
+div.toctree-wrapper.compound a span:hover {
+  color: #eca3f5;
+}
+div.toctree-wrapper.compound span.package-name {
+  color: #ffd43b;
+}
+div.toctree-wrapper.compound span.program-name {
+  color: #a8d8ff;
+}
+div.toctree-wrapper.compound span.package-subtitle {
+  color: white;
+  text-decoration: underline;
+}
+@media screen and (min-width: 1400px) {
+  .wy-nav-content-wrap {
+    background-color: #eca3f566;
+  }
 }
