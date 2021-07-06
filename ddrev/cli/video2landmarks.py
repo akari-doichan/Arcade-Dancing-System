@@ -55,7 +55,7 @@ def video2landmarks(argv=sys.argv[1:]):
     parser.add_argument(
         "--angle-unit",
         choices=["radian", "degree"],
-        default="radian",
+        default="degree",
         help="Unit of Angle.",
     )
     args = parser.parse_args(argv)

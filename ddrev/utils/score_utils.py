@@ -16,7 +16,7 @@ def calculate_angle(
 
     Args:
         b (npt.NDArray[float])  : A coordinate of a center point.
-        a,c (npt.NDArray[float]): Coordinates for other points.
+        a,c (npt.NDArray[float]): Coordinates for Both end points.
         unit (str)              : Angle unit. Defaults to ``"radian"``.
 
     Returns:

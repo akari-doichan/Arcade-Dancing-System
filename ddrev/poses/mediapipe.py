@@ -283,7 +283,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         landmarks: NormalizedLandmarkList,
         angle_points: Optional[List[List[int]]] = None,
         unit: bool = "radian",
-    ) -> List[float]:
+    ) -> List[Tuple[List[float], float]]:
         """Calculate angles of each ``angle_points``.
 
         Args:
@@ -292,7 +292,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             unit (str, optional)                               : Unit of Angle. Defaults to ``"radian"``.
 
         Returns:
-            List[float]: A list of ``3`` points for which you want to calculate the angle.
+            List[Tuple[List[float],float]]: A list of coordinate and angle tuples
 
         Examples:
             >>> import cv2
@@ -304,7 +304,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         """
         if angle_points is None:
             angle_points = mpPoseEstimator.ANGLE_POINTS
-        angles = [0.0] * len(angle_points)
+        angles = [([0, 0], -1)] * len(angle_points)
         if (landmarks is None) or (not hasattr(landmarks, "landmark")):
             return angles
         landmark = landmarks.landmark
@@ -316,5 +316,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
                     break
                 coords.append(np.asarray([p.x, p.y, p.z]))
             if len(coords) == 3:
-                angles[i] = calculate_angle(*coords, unit=unit)
+                angle = calculate_angle(*coords, unit=unit)
+                coord = np.mean(coords, axis=0)[:2].tolist()
+                angles[i] = [coord, angle]
         return angles

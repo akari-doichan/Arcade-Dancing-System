@@ -118,13 +118,15 @@ def arcade_dance(argv=sys.argv[1:]):
         frame_ = estimator.draw_landmarks(frame=frame_, landmarks=landmarks_)
         cv2.imshow(winname="Instructors", mat=frame_)
         score = 0
-        for i, (s, s_, aps) in enumerate(zip(scores, scores_, angle_points)):
+        for ((x, y), s), (_, s_) in zip(scores, scores_):
+            if (s == -1) or (s_ == -1):
+                continue
             cv2.putText(
                 img=frame,
-                text=f"{aps}: {abs(s-s_)}",
-                org=(10, 50 * (i + 1)),
+                text=f"{abs(s-s_):.1f}",
+                org=(int(x * width), int(y * height)),
                 fontFace=cv2.FONT_HERSHEY_PLAIN,
-                fontScale=3,
+                fontScale=1,
                 color=(255, 255, 255),
             )
         return frame

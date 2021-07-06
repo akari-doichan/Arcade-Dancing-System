@@ -12,7 +12,7 @@ table.highlighttable td.linenos, div.doctest > div.highlight span.gp {
 img.full-width {
   width: 100%;
 }
-/*  */
+/* ToC Tree Wrapper */
 div.toctree-wrapper.compound {
   color: white;
   background-color: #343131;
