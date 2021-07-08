@@ -117,7 +117,9 @@ class VideoCapture(cv2.VideoCapture):
             key = cv2.waitKey(delay=delay)
             frame = function(frame, key)
             cv2.imshow(winname=winname, mat=frame)
-            if key in stop_keys:
-                break
+            if key != -1:
+                print(f"{toGREEN(chr(key))} was keyed in.")
+                if key in stop_keys:
+                    break
         self.release()
         cv2.destroyWindow(winname)

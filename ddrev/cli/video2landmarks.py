@@ -101,7 +101,8 @@ def video2landmarks(argv=sys.argv[1:]):
         ith_landmarks = estimator.process(frame=frame)
         landmarks.append(estimator.landmarks2string(ith_landmarks))
         if score_method == "angle":
-            scores.append(estimator.calculate_angle(ith_landmarks, unit=angle_unit))
+            angle = estimator.calculate_angle(ith_landmarks, unit=angle_unit)
+            scores.append(angle)
     cap.release()
 
     if hasattr(estimator, "__exit__"):

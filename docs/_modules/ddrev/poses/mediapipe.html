@@ -177,6 +177,7 @@
 <span class="kn">from</span> <span class="nn">mediapipe.framework.formats.landmark_pb2</span> <span class="kn">import</span> <span class="n">NormalizedLandmarkList</span>
 
 <span class="kn">from</span> <span class="nn">..utils._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
+<span class="kn">from</span> <span class="nn">..utils.feedback_utils</span> <span class="kn">import</span> <span class="n">drawScoreArc</span><span class="p">,</span> <span class="n">putScoreText</span>
 <span class="kn">from</span> <span class="nn">..utils.score_utils</span> <span class="kn">import</span> <span class="n">calculate_angle</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BasePoseEstimator</span>
 
@@ -205,17 +206,17 @@
 
     <span class="n">ANGLE_POINTS</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">26</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">24</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">28</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">23</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">27</span><span class="p">],</span>
-        <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">31</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">31</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
     <span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -329,16 +330,21 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            npt.NDArray[np.uint8]: An edited (drawn ``landmarks``) frame.</span>
 
-<span class="sd">        Examples:</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">         :class: popup-img</span>
+
 <span class="sd">            &gt;&gt;&gt; import cv2</span>
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
-<span class="sd">            &gt;&gt;&gt; image = cv2.imread(&quot;sample.jpg&quot;) # BGR images</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.utils._path import SAMPLE_IMAGE</span>
+<span class="sd">            &gt;&gt;&gt; image = cv2.imread(SAMPLE_IMAGE) # BGR images</span>
 <span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
 <span class="sd">            &gt;&gt;&gt; image_edited = estimator.process_frame(image, inplace=False)</span>
-<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,6))</span>
-<span class="sd">            &gt;&gt;&gt; for img,ax in zip([image, image_edited], axes):</span>
+<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,4))</span>
+<span class="sd">            &gt;&gt;&gt; for ax,img,title in zip(axes, [image, image_edited], [&quot;Original&quot;, &quot;Pose-Estimated&quot;]):</span>
 <span class="sd">            ...     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))</span>
+<span class="sd">            ...     ax.axis(&quot;off&quot;)</span>
+<span class="sd">            ...     ax.set_title(title, fontsize=18)</span>
 <span class="sd">            &gt;&gt;&gt; fig.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">landmarks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
@@ -361,16 +367,21 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            npt.NDArray[np.uint8]: An edited (drawn ``landmarks``) frame.</span>
 
-<span class="sd">        Examples:</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">          :class: popup-img</span>
+
 <span class="sd">            &gt;&gt;&gt; import cv2</span>
 <span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
-<span class="sd">            &gt;&gt;&gt; image = cv2.imread(&quot;sample.jpg&quot;) # BGR images</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.utils._path import SAMPLE_IMAGE</span>
+<span class="sd">            &gt;&gt;&gt; image = cv2.imread(SAMPLE_IMAGE) # BGR images</span>
 <span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
 <span class="sd">            &gt;&gt;&gt; landmarks = estimator.process(image)</span>
 <span class="sd">            &gt;&gt;&gt; image_edited = estimator.draw_landmarks(image, landmarks, inplace=False)</span>
-<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,6))</span>
-<span class="sd">            &gt;&gt;&gt; for img,ax in zip([image, image_edited], axes):</span>
+<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,4))</span>
+<span class="sd">            &gt;&gt;&gt; for ax,img,title in zip(axes, [image, image_edited], [&quot;Original&quot;, &quot;Pose-Estimated&quot;]):</span>
 <span class="sd">            ...     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))</span>
+<span class="sd">            ...     ax.axis(&quot;off&quot;)</span>
+<span class="sd">            ...     ax.set_title(title, fontsize=18)</span>
 <span class="sd">            &gt;&gt;&gt; fig.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
@@ -424,6 +435,7 @@
 
 <span class="sd">        Examples:</span>
 <span class="sd">            &gt;&gt;&gt; import cv2</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
 <span class="sd">            &gt;&gt;&gt; with open(&quot;landmarks.txt&quot;) as f:</span>
 <span class="sd">            ...     landmarks_str = f.read()</span>
@@ -431,7 +443,7 @@
 <span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
 <span class="sd">            &gt;&gt;&gt; landmarks = estimator.string2landmarks(landmarks_str)</span>
 <span class="sd">            &gt;&gt;&gt; image_edited = estimator.draw_landmarks(image, landmarks, inplace=False)</span>
-<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,6))</span>
+<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12,4))</span>
 <span class="sd">            &gt;&gt;&gt; for img,ax in zip([image, image_edited], axes):</span>
 <span class="sd">            ...     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))</span>
 <span class="sd">            &gt;&gt;&gt; fig.show()</span>
@@ -441,30 +453,31 @@
 <div class="viewcode-block" id="mpPoseEstimator.calculate_angle"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.calculate_angle">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">calculate_angle</span><span class="p">(</span>
         <span class="n">landmarks</span><span class="p">:</span> <span class="n">NormalizedLandmarkList</span><span class="p">,</span>
-        <span class="n">angle_points</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">angle_points</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ANGLE_POINTS</span><span class="p">,</span>
         <span class="n">unit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="s2">&quot;radian&quot;</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Calculate angles of each ``angle_points``.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            landmarks (NormalizedLandmarkList)                 : Landmarks.</span>
-<span class="sd">            angle_points (Optional[List[List[int]]], optional) : [description]. Defaults to ``None``.</span>
+<span class="sd">            angle_points (Optional[List[List[int]]], optional) : A list of 3 points used to determine the angle. Defaults to ``ANGLE_POINTS``.</span>
 <span class="sd">            unit (str, optional)                               : Unit of Angle. Defaults to ``&quot;radian&quot;``.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            List[Tuple[List[float],float]]: A list of coordinate and angle tuples</span>
+<span class="sd">            npt.NDArray[float]: A list of angles.</span>
 
 <span class="sd">        Examples:</span>
 <span class="sd">            &gt;&gt;&gt; import cv2</span>
 <span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
-<span class="sd">            &gt;&gt;&gt; img = cv2.imread(&quot;/path/to/img.jpg&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.utils._path import SAMPLE_IMAGE</span>
+<span class="sd">            &gt;&gt;&gt; img = cv2.imread(SAMPLE_IMAGE)</span>
 <span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
 <span class="sd">            &gt;&gt;&gt; landmarks = estimator.process(img)</span>
 <span class="sd">            &gt;&gt;&gt; angles = estimator.calculate_angle(landmarks)</span>
+<span class="sd">            &gt;&gt;&gt; len(angles)</span>
+<span class="sd">            12</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">angle_points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">angle_points</span> <span class="o">=</span> <span class="n">mpPoseEstimator</span><span class="o">.</span><span class="n">ANGLE_POINTS</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="p">[([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">angle_points</span><span class="p">)</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">angle_points</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">landmarks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">landmarks</span><span class="p">,</span> <span class="s2">&quot;landmark&quot;</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">angles</span>
         <span class="n">landmark</span> <span class="o">=</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">landmark</span>
@@ -478,32 +491,73 @@
                 <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]))</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">angles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="o">*</span><span class="n">coords</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">angles</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="mpPoseEstimator.draw_score"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.draw_score">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">draw_score</span><span class="p">(</span>
         <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
-        <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
         <span class="n">landmarks</span><span class="p">:</span> <span class="n">NormalizedLandmarkList</span><span class="p">,</span>
-        <span class="n">points</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+        <span class="n">angle_points</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ANGLE_POINTS</span><span class="p">,</span>
         <span class="n">draw_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span>
             <span class="p">[</span><span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span>
             <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
-        <span class="p">],</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">drawScoreArc</span><span class="p">,</span>
         <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Draw ``score`` in ``frame`` using ``draw_func``</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame (npt.NDArray[np.uint8])                                                                           : Input image.</span>
+<span class="sd">            scores (List[float])                                                                                    : Scores to display.</span>
+<span class="sd">            landmarks (NormalizedLandmarkList)                                                                      : Landmarks.</span>
+<span class="sd">            angle_points (List[List[int]])                                                                          : A list of 3 points used to determine the angle. Defaults to ``ANGLE_POINTS``.</span>
+<span class="sd">            draw_func (Callable[ [npt.NDArray[np.uint8], List[List[float]], float, bool], npt.NDArray[np.uint8], ]) : How to draw the ``score``. Defaults to :meth:`drawScoreArc &lt;ddrev.utils.feedback_utils.drawScoreArc&gt;`.</span>
+<span class="sd">            inplace (bool, optional)                                                                                : Whether frame is edited (drawn ``score``) in place. Defaults to ``:meth:drawScoreArc``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            npt.NDArray[np.uint8]: An edited (drawn ``score`` using ``draw_func``) image.</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">         :class: popup-img</span>
+
+<span class="sd">            &gt;&gt;&gt; import cv2</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.poses.mediapipe import mpPoseEstimator</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.utils import drawScoreArc, putScoreText</span>
+<span class="sd">            &gt;&gt;&gt; from ddrev.utils._path import SAMPLE_IMAGE</span>
+<span class="sd">            &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2, figsize=(12, 6))</span>
+<span class="sd">            &gt;&gt;&gt; image = cv2.imread(SAMPLE_IMAGE)  # BGR images</span>
+<span class="sd">            &gt;&gt;&gt; estimator = mpPoseEstimator()</span>
+<span class="sd">            &gt;&gt;&gt; landmarks = estimator.process(image)</span>
+<span class="sd">            &gt;&gt;&gt; estimator.draw_landmarks(image, landmarks, inplace=True)</span>
+<span class="sd">            &gt;&gt;&gt; scores = [(i+1)/len(landmarks.landmark) for i in range(len(landmarks.landmark))]</span>
+<span class="sd">            &gt;&gt;&gt; for draw_func, ax in zip([drawScoreArc, putScoreText], axes):</span>
+<span class="sd">            ...     img = estimator.draw_score(</span>
+<span class="sd">            ...         frame=image, scores=scores, landmarks=landmarks,</span>
+<span class="sd">            ...         draw_func=draw_func, inplace=False</span>
+<span class="sd">            ...     )</span>
+<span class="sd">            ...     ax.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))</span>
+<span class="sd">            ...     ax.axis(&quot;off&quot;)</span>
+<span class="sd">            ...     ax.set_title(draw_func.__name__, fontsize=18)</span>
+<span class="sd">            &gt;&gt;&gt; fig.show()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">landmarks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">landmarks</span><span class="p">,</span> <span class="s2">&quot;landmark&quot;</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">frame</span>
         <span class="n">landmark</span> <span class="o">=</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">landmark</span>
-        <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">landmark</span><span class="p">[</span><span class="n">point</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">visibility</span> <span class="o">&lt;</span> <span class="n">VISIBILITY_THRESHOLD</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span><span class="p">]))</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">frame</span> <span class="o">=</span> <span class="n">draw_func</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">inplace</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">angle_points</span><span class="p">,</span> <span class="n">scores</span><span class="p">)):</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">landmark</span><span class="p">[</span><span class="n">point</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">visibility</span> <span class="o">&lt;</span> <span class="n">VISIBILITY_THRESHOLD</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="c1"># coords.append(np.asarray([p.x, p.y, p.z]))</span>
+                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">frame</span> <span class="o">=</span> <span class="n">draw_func</span><span class="p">(</span>
+                    <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">score</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">coords</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span>
         <span class="k">return</span> <span class="n">frame</span></div></div>
 </pre></div>
 

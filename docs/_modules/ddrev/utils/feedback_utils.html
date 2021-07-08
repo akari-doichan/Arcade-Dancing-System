@@ -193,6 +193,50 @@
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">cmap</span><span class="p">(</span><span class="n">score</span><span class="p">)][:</span><span class="mi">3</span><span class="p">])</span>  <span class="c1"># [::-1]</span></div>
 
 
+<div class="viewcode-block" id="cmap_indicator_create"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.cmap_indicator_create">[docs]</a><span class="k">def</span> <span class="nf">cmap_indicator_create</span><span class="p">(</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">transpose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">turnover</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Create a colormap indicator</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        width (int), height (int)             : The size of the created indicator.</span>
+<span class="sd">        transpose (bool, optional)            : Whether to transpose it or not. Defaults to ``False``.</span>
+<span class="sd">        turnover (bool, optional)             : Whether to turn it over or not. Defaults to ``False``.</span>
+<span class="sd">        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm&quot;``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: Color map indicator.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">      :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.utils import cmap_indicator_create</span>
+<span class="sd">        &gt;&gt;&gt; fig, axes = plt.subplots(ncols=2,nrows=2,figsize=(12,8))</span>
+<span class="sd">        &gt;&gt;&gt; for ax_r,transpose in zip(axes, [False, True]):</span>
+<span class="sd">        ...     for ax,turnover in zip(ax_r, [False, True]):</span>
+<span class="sd">        ...         ax.imshow(cmap_indicator_create(width=100, height=50, transpose=transpose, turnover=turnover))</span>
+<span class="sd">        ...         ax.axis(&quot;off&quot;)</span>
+<span class="sd">        ...         ax.set_title(f&quot;transpose: {transpose}, turnover: {turnover}&quot;, fontsize=18)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
+        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+    <span class="n">indicator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+        <span class="n">indicator</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">score2color</span><span class="p">(</span><span class="n">score</span><span class="o">=</span><span class="n">i</span> <span class="o">/</span> <span class="n">height</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="n">indicator</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">turnover</span><span class="p">:</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="n">indicator</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">indicator</span></div>
+
+
 <div class="viewcode-block" id="drawScoreArc"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.drawScoreArc">[docs]</a><span class="k">def</span> <span class="nf">drawScoreArc</span><span class="p">(</span>
     <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
     <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>

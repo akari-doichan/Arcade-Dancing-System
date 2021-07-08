@@ -35,6 +35,50 @@ def score2color(
     return tuple([int(255 * e) for e in cmap(score)][:3])  # [::-1]
 
 
+def cmap_indicator_create(
+    width: int,
+    height: int,
+    transpose: bool = False,
+    turnover: bool = False,
+    cmap: Union[str, Colormap] = "coolwarm",
+) -> npt.NDArray[np.uint8]:
+    """Create a colormap indicator
+
+    Args:
+        width (int), height (int)             : The size of the created indicator.
+        transpose (bool, optional)            : Whether to transpose it or not. Defaults to ``False``.
+        turnover (bool, optional)             : Whether to turn it over or not. Defaults to ``False``.
+        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``"coolwarm"``.
+
+    Returns:
+        npt.NDArray[np.uint8]: Color map indicator.
+
+    .. plot::
+      :class: popup-img
+
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from ddrev.utils import cmap_indicator_create
+        >>> fig, axes = plt.subplots(ncols=2,nrows=2,figsize=(12,8))
+        >>> for ax_r,transpose in zip(axes, [False, True]):
+        ...     for ax,turnover in zip(ax_r, [False, True]):
+        ...         ax.imshow(cmap_indicator_create(width=100, height=50, transpose=transpose, turnover=turnover))
+        ...         ax.axis("off")
+        ...         ax.set_title(f"transpose: {transpose}, turnover: {turnover}", fontsize=18)
+        >>> fig.show()
+    """
+    if transpose:
+        width, height = (height, width)
+    indicator = np.zeros(shape=(height, width, 3), dtype=np.uint8)
+    for i in range(height):
+        indicator[i] = score2color(score=i / height, cmap=cmap)
+    if transpose:
+        indicator = indicator.transpose(1, 0, 2)
+    if turnover:
+        indicator = indicator[::-1]
+    return indicator
+
+
 def drawScoreArc(
     frame: npt.NDArray[np.uint8],
     score: float,

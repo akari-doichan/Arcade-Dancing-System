@@ -186,6 +186,51 @@
   <div class="section" id="module-ddrev.utils.generic_utils">
 <span id="ddrev-utils-generic-utils-module"></span><h1>ddrev.utils.generic_utils module<a class="headerlink" href="#module-ddrev.utils.generic_utils" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="ddrev.utils.generic_utils.str_strip">
+<span class="sig-prename descclassname"><span class="pre">ddrev.utils.generic_utils.</span></span><span class="sig-name descname"><span class="pre">str_strip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddrev/utils/generic_utils.html#str_strip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.utils.generic_utils.str_strip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert all consecutive whitespace  characters to <cite>‘ ‘</cite> (half-width whitespace), then return a copy of the string with leading and trailing whitespace removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – string</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.utils</span> <span class="kn">import</span> <span class="n">str_strip</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str_strip</span><span class="p">(</span><span class="s2">&quot; hoge   &quot;</span><span class="p">)</span>
+<span class="go">&#39;hoge&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str_strip</span><span class="p">(</span><span class="s2">&quot; ho    ge   &quot;</span><span class="p">)</span>
+<span class="go">&#39;ho ge&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">str_strip</span><span class="p">(</span><span class="s2">&quot;  ho    g　e&quot;</span><span class="p">)</span>
+<span class="go">&#39;ho g e&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ddrev.utils.generic_utils.ListParamProcessor">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ddrev.utils.generic_utils.</span></span><span class="sig-name descname"><span class="pre">ListParamProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_strings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">choices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">help</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metavar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddrev/utils/generic_utils.html#ListParamProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.utils.generic_utils.ListParamProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.Action</span></code></p>
+<p>Receive List arguments.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ddrev.utils</span> <span class="kn">import</span> <span class="n">ListParamProcessor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--list_params&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">ListParamProcessor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--list_params&quot;</span><span class="p">,</span> <span class="s2">&quot;[あ, い, う]&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">args</span><span class="o">.</span><span class="n">list_params</span>
+<span class="go">[&#39;あ&#39;, &#39;い&#39;, &#39;う&#39;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you run from the command line, execute as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python app.py --list_params &quot;[あ, い, う]&quot;
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ddrev.utils.generic_utils.now_str">
 <span class="sig-prename descclassname"><span class="pre">ddrev.utils.generic_utils.</span></span><span class="sig-name descname"><span class="pre">now_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tz</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.timezone</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'%Y-%m-%d&#64;%H.%M.%S'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/ddrev/utils/generic_utils.html#now_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.utils.generic_utils.now_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns new datetime string representing current time local to <code class="docutils literal notranslate"><span class="pre">tz</span></code> under the control of an explicit format string.</p>
