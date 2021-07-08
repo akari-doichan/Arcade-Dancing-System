@@ -20,3 +20,6 @@ for name, (x, y) in zip(list("ABCA"), [A,B,C,A]):
         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))
     pX, pY = (X, Y)
 ax.imshow(frame)
+ax.axis("off")
+ax.set_title("drawScoreArc", fontsize=18)
+fig.show()

@@ -20,4 +20,6 @@ for name, (x, y) in zip(list("ABC"), coords):
         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))
     pX, pY = (X, Y)
 ax.imshow(frame)
+ax.axis("off")
+ax.set_title("putScoreText", fontsize=18)
 fig.show()
