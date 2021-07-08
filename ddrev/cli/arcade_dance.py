@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import sys
+import warnings
 from typing import List
 
 import cv2
@@ -13,9 +14,9 @@ from tqdm import tqdm
 from .. import poses
 from ..realtime import VideoCapture
 from ..recorder import copyVideoSpec
-from ..utils._colorings import toBLUE, toGREEN
+from ..utils._colorings import toBLUE, toGREEN, toRED
 from ..utils.feedback_utils import cmap_indicator_create, drawScoreArc
-from ..utils.generic_utils import ListParamProcessor
+from ..utils.generic_utils import ListParamProcessor, now_str
 from ..utils.score_utils import calculate_angle
 
 
@@ -116,14 +117,6 @@ def arcade_dance(argv=sys.argv[1:]):
 
     with open(args.json) as f:
         data = json.load(f)
-    cam = args.cam
-    cap = VideoCapture(cam)
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    # record = args.record
-    # is_ok, out, out_path = copyVideoSpec(cap=cap, codec=args.codec, out_path=args.out)
-    # if record and (not is_ok):
-    #     raise TypeError(f"VideoWriter was not created correctly.")
 
     # Instructor7s video
     video_path = data["video"]
@@ -142,6 +135,21 @@ def arcade_dance(argv=sys.argv[1:]):
     else:
         integrate_windows = False
         inst_x, inst_y, inst_w, inst_h = (0, 0, instructor_width, instructor_height)
+
+    record = args.record
+    if record and (instructor_xywh is None):
+        warnings.warn(
+            f"If you specify {toGREEN('--instructor-xywm')} argument, the instructor's video can also be drawn in the same frame."
+        )
+
+    cam = args.cam
+    out_path = args.out
+    if record and out_path is None:
+        out_path = f"arcade-dance_{now_str()}.mp4"
+    out_codec = args.codec
+    cap = VideoCapture(cam, out_path=out_path, codec=out_codec)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     # Estimator
     model = data["model"]
@@ -179,8 +187,7 @@ def arcade_dance(argv=sys.argv[1:]):
         tuple([int(e) for e in cmap_indicator[-1, -1]]),
     ]
 
-    print(
-        f"""[Arcade Dancing System]
+    msg = f"""[Arcade Dancing System]
     * Model: {toGREEN(model)}
     * Scoring Method: {toGREEN(score_method)}
     * Web Camera
@@ -198,9 +205,13 @@ def arcade_dance(argv=sys.argv[1:]):
         * {toGREEN('r')} -> Restart the instructor video.
         * {toGREEN('d')} -> Increase the speed of the instructor video.
         * {toGREEN('s')} -> Slow donw the speed of the instructor video.
-        * {toGREEN('q')} or {toGREEN('<esc>')} -> Stop the program.
+        * {toGREEN('q')} or {toGREEN('<esc>')} -> Stop the program."""
+    if record:
+        msg += f"""
+    * Record ({toRED("DO NOT exit this program with control+C")})
+        * Output Path: {toBLUE(cap.out_path)}
     """
-    )
+    print(msg)
 
     VIDEO_SPEED = [1]
 

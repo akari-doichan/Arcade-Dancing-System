@@ -1,23 +1,26 @@
 # coding: utf-8
 import warnings
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 import cv2
 import numpy as np
 import numpy.typing as npt
 
+from .recorder import copyVideoSpec
 from .utils._colorings import toGREEN, toRED
 
 
 class VideoCapture(cv2.VideoCapture):
     """Wrapper class for ``cv2.VideoCapture``.
 
-    Attributes:
-        tm (cv2.TickMeter) :
-        max_count (int)    :
+    Args:
+        out_path (Optional[str], optional) : The path to which the ``cv2.VideoWriter`` writes video. Defaults to ``None``.
+        codec (str, optional)              : Video Codec. Defaults to ``"MP4V"``.
     """
 
-    def __init__(self, *args, max_count: int = 10, **kwargs):
+    def __init__(
+        self, *args, out_path: Optional[str] = None, codec: str = "MP4V", **kwargs
+    ):
         super().__init__(*args, **kwargs)
         if not self.isOpened():
             warnings.warn(
@@ -25,15 +28,21 @@ class VideoCapture(cv2.VideoCapture):
                     "VideoCapture is not opened. Please make sure the device number is correct."
                 )
             )
+        if out_path is not None:
+            self.set_VideoWriter(out_path=out_path, codec=codec)
+        else:
+            self.out, self.out_path = (None, None)
 
-    #     self.tm = cv2.TickMeter()
-    #     self.max_count = max_count
+    def set_VideoWriter(self, out_path: str, codec: str = "MP4V") -> None:
+        """Set a ``cv2.VideoWriter`` using :meth:`copyVideoSpec <ddrev.recorder.copyVideoSpec>`
 
-    # def calc_fps(self):
-    #     self.tm.stop()
-    #     fps = self.max_count / self.tm.getTimeSec()
-    #     self.tm.reset()
-    #     self.tm.start()
+        Args:
+            out_path (str)        : The path to which the ``cv2.VideoWriter`` writes video.
+            codec (str, optional) : Video Codec. Defaults to ``"MP4V"``.
+        """
+        _, self.out, self.out_path = copyVideoSpec(
+            cap=self, codec=codec, out_path=out_path
+        )
 
     @classmethod
     def check_device(cls) -> None:
@@ -117,9 +126,13 @@ class VideoCapture(cv2.VideoCapture):
             key = cv2.waitKey(delay=delay)
             frame = function(frame, key)
             cv2.imshow(winname=winname, mat=frame)
+            if self.out is not None:
+                self.out.write(frame)
             if key != -1:
                 print(f"{toGREEN(chr(key))} was keyed in.")
                 if key in stop_keys:
                     break
         self.release()
+        if self.out is not None:
+            self.out.release()
         cv2.destroyWindow(winname)
