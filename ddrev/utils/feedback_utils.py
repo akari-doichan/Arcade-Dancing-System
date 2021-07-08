@@ -1,0 +1,176 @@
+# coding: utf-8
+from typing import List, Optional, Tuple, Union
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import numpy.typing as npt
+from matplotlib.colors import Colormap
+
+from .score_utils import calculate_angle
+
+
+def score2color(
+    score: float, cmap: Union[str, Colormap] = "coolwarm"
+) -> Tuple[int, int, int]:
+    """Convert score to RGB color.
+
+    Args:
+        score (float)                        : Score normalized between ``0`` and ``1``.
+        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``"coolwarm"``.
+
+    Returns:
+        Tuple[int,int,int]: RGB color corresponding to the score.
+
+    Examples:
+        >>> from ddrev.utils import score2color
+        >>> score2color(score=0.2)
+        (123, 158, 248)
+        >>> score2color(score=0.5)
+        (221, 220, 219)
+        >>> score2color(score=1)
+        (59, 77, 193)
+    """
+    cmap = plt.get_cmap(cmap)
+    return tuple([int(255 * e) for e in cmap(score)][:3])  # [::-1]
+
+
+def drawScoreArc(
+    frame: npt.NDArray[np.uint8],
+    score: float,
+    coords: List[List[int]],
+    inplace: bool = True,
+    axes: Tuple[int, int] = (10, 10),
+    lineType: int = cv2.LINE_8,
+    cmap: Union[str, Colormap] = "coolwarm",
+    max_score: Optional[float] = None,
+    **kwargs,
+) -> npt.NDArray[np.uint8]:
+    """Draw an arc with fill color according to the ``score``.
+
+    Args:
+        frame (npt.NDArray[np.uint8])        : Input image.
+        score (float)                        : Score value to describe.
+        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.
+        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.
+        axes (Tuple[int, int], optional)     : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.
+        lineType (int, optional)             : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
+
+    Returns:
+        npt.NDArray[np.uint8]: An edited image.
+
+    .. plot::
+        :class: popup-img
+
+        >>> import cv2
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from ddrev.utils import drawScoreArc, calculate_angle
+        >>> fig, ax = plt.subplots()
+        >>> A = np.asarray([0.2, 0.9])
+        >>> B = np.asarray([0.8, 0.6])
+        >>> C = np.asarray([0.3, 0.5])
+        >>> frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)
+        >>> H, W = frame.shape[:2]
+        >>> drawScoreArc(frame, calculate_angle(A,B,C), coords=(A,B,C), max_score=360.)
+        >>> drawScoreArc(frame, calculate_angle(A,C,B), coords=(A,C,B), max_score=360.)
+        >>> drawScoreArc(frame, calculate_angle(B,A,C), coords=(B,A,C), max_score=360.)
+        >>> pX, pY = (None, None)
+        >>> for name, (x, y) in zip(list("ABCA"), [A,B,C,A]):
+        ...     X, Y = (int(x * W), int(y * H))
+        ...     ax.scatter(X, Y, color="red")
+        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color="red")
+        ...     if pX is not None:
+        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))
+        ...     pX, pY = (X, Y)
+        >>> ax.imshow(frame)
+        >>> fig.show()
+    """
+    H, W = frame.shape[:2]
+    if not inplace:
+        frame = frame.copy()
+    coords = np.asarray(coords)[:, :2]
+    cx, cy = coords[1]
+    cx_slide = (cx + 10, cy)  # Slide the center point in the x-axis direction
+    startAngle = 360.0 - calculate_angle(cx_slide, *coords[1:])
+    angle = calculate_angle(*coords)
+    if (score > 1) and (max_score is not None):
+        score /= max_score
+    cv2.ellipse(
+        img=frame,
+        center=(int(cx * W), int(cy * H)),
+        axes=axes,
+        angle=startAngle,
+        startAngle=0,
+        endAngle=angle,
+        color=score2color(score, cmap=cmap),
+        thickness=-1,
+        lineType=lineType,
+    )
+    return frame
+
+
+def putScoreText(
+    frame: npt.NDArray[np.uint8],
+    score: float,
+    coords: List[List[int]],
+    inplace: bool = True,
+    fontFace: int = cv2.FONT_HERSHEY_PLAIN,
+    fontScale: int = 1,
+    color: Tuple[int, int, int] = (0, 255, 255),
+    **kwargs,
+) -> npt.NDArray[np.uint8]:
+    """Write the ``score`` at the midpoint of both ends of the coordinates (``coords``).
+
+    Args:
+        frame (npt.NDArray[np.uint8])        : Input image.
+        score (float)                        : Score value to describe.
+        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.
+        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.
+        fontFace (int, optional)             : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.
+        fontScale (int, optional)            : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.
+        color (Tuple[int,int,int], optional) : Text color. Defaults to ``(0,255,255)``.
+
+    Returns:
+        npt.NDArray[np.uint8]: An edited image.
+
+    .. plot::
+        :class: popup-img
+
+        >>> import cv2
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from ddrev.utils import putScoreText, calculate_angle
+        >>> fig, ax = plt.subplots()
+        >>> coords = [
+        ...     np.asarray([0.2, 0.9]),
+        ...     np.asarray([0.8, 0.6]),
+        ...     np.asarray([0.3, 0.5]),
+        >>> ]
+        >>> frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)
+        >>> H, W = frame.shape[:2]
+        >>> putScoreText(frame, calculate_angle(*coords), coords=coords)
+        >>> pX, pY = (None, None)
+        >>> for name, (x, y) in zip(list("ABC"), coords):
+        ...     X, Y = (int(x * W), int(y * H))
+        ...     ax.scatter(X, Y, color="red")
+        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color="red")
+        ...     if pX is not None:
+        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))
+        ...     pX, pY = (X, Y)
+        >>> ax.imshow(frame)
+        >>> fig.show()
+    """
+    H, W = frame.shape[:2]
+    if not inplace:
+        frame = frame.copy()
+    x, y = np.mean(coords, axis=0)[:2].tolist()
+    cv2.putText(
+        img=frame,
+        text=f"{score:.1f}",
+        org=(int(x * W), int(y * H)),
+        fontFace=fontFace,
+        fontScale=fontScale,
+        color=color,
+    )
+    return frame

@@ -101,6 +101,8 @@ def arcade_dance(argv=sys.argv[1:]):
         Returns:
             npt.NDArray[np.uint8]: An edited (drawn ``landmarks`` and score) frame.
         """
+        if key == ord("r"):
+            video.set(cv2.CAP_PROP_POS_FRAMES, 0)
         # Students
         # bg = np.zeros(shape=(width, height, 3), dtype=np.uint8)
         landmarks = estimator.process(frame)
@@ -118,17 +120,9 @@ def arcade_dance(argv=sys.argv[1:]):
         frame_ = estimator.draw_landmarks(frame=frame_, landmarks=landmarks_)
         cv2.imshow(winname="Instructors", mat=frame_)
         score = 0
-        for ((x, y), s), (_, s_) in zip(scores, scores_):
+        for i, (s, s_) in enumerate(zip(scores, scores_)):
             if (s == -1) or (s_ == -1):
                 continue
-            cv2.putText(
-                img=frame,
-                text=f"{abs(s-s_):.1f}",
-                org=(int(x * width), int(y * height)),
-                fontFace=cv2.FONT_HERSHEY_PLAIN,
-                fontScale=1,
-                color=(255, 255, 255),
-            )
-        return frame
+            estimator.draw_score()
 
     cap.realtime_process(function=process)

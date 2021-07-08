@@ -8,7 +8,7 @@ The landmark model in MediaPipe Pose predicts the location of 33 pose landmarks 
 
 .. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png
 """
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import cv2
 import mediapipe as mp
@@ -314,9 +314,34 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
                 p = landmark[point]
                 if p.visibility < VISIBILITY_THRESHOLD:
                     break
-                coords.append(np.asarray([p.x, p.y, p.z]))
+                # coords.append(np.asarray([p.x, p.y, p.z]))
+                coords.append(np.asarray([p.x, p.y]))
             if len(coords) == 3:
-                angle = calculate_angle(*coords, unit=unit)
-                coord = np.mean(coords, axis=0)[:2].tolist()
-                angles[i] = [coord, angle]
+                angles[i] = calculate_angle(*coords, unit=unit)
         return angles
+
+    @staticmethod
+    def draw_score(
+        frame: npt.NDArray[np.uint8],
+        score: float,
+        landmarks: NormalizedLandmarkList,
+        points: List[int],
+        draw_func: Callable[
+            [npt.NDArray[np.uint8], List[List[float]], float, bool],
+            npt.NDArray[np.uint8],
+        ],
+        inplace: bool = True,
+        **kwargs
+    ) -> npt.NDArray[np.uint8]:
+        if (landmarks is None) or (not hasattr(landmarks, "landmark")):
+            return frame
+        landmark = landmarks.landmark
+        coords = []
+        for point in points:
+            p = landmark[point]
+            if p.visibility < VISIBILITY_THRESHOLD:
+                break
+            coords.append(np.asarray([p.x, p.y, p.z]))
+        if len(coords) == 3:
+            frame = draw_func(frame, score, coords, inplace, **kwargs)
+        return frame
