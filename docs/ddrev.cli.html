@@ -6,18 +6,19 @@
 <head>
   <meta charset="utf-8">
   
-  <meta property="og:title" content="ddrev.utils.video_utils module" />
+  <meta property="og:title" content="ddrev.cli package" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.utils.video_utils.html" />
+  <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.cli.html" />
+  <meta property="og:description" content="Submodules: ddrev.cli.arcade_dance module, ddrev.cli.video2landmarks module. Module contents:" />
   <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png" />
-  <meta property="og:image:alt" content="ddrev.utils.video_utils module" />
+  <meta property="og:image:alt" content="ddrev.cli package" />
   <meta property="og:site_name" content="Python-Charmers" />
 <meta name="twitter:site" content="@cabernet_rock" />
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image:src" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ddrev.utils.video_utils module &mdash; Arcade Dance System  documentation</title>
+  <title>ddrev.cli package &mdash; Arcade Dance System  documentation</title>
   
 
   
@@ -53,9 +54,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="Arcade Dance System  documentation" href="index.html"/>
-        <link rel="up" title="ddrev.utils package" href="ddrev.utils.html"/>
-        <link rel="next" title="ddrev.playback module" href="ddrev.playback.html"/>
-        <link rel="prev" title="ddrev.utils.score_utils module" href="ddrev.utils.score_utils.html"/> 
+        <link rel="up" title="ddrev package" href="ddrev.html"/>
+        <link rel="next" title="ddrev.cli.arcade_dance module" href="ddrev.cli.arcade_dance.html"/>
+        <link rel="prev" title="ddrev package" href="ddrev.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -104,13 +105,13 @@
                 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="ddrev.html">ddrev package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="ddrev.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="ddrev.cli.html">ddrev.cli package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ddrev.poses.html">ddrev.poses package</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="ddrev.utils.html">ddrev.utils package</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="ddrev.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ddrev.utils.html#module-ddrev.utils">Module contents</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ddrev.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ddrev.cli">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ddrev.poses.html">ddrev.poses package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ddrev.utils.html">ddrev.utils package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ddrev.html#submodules">Submodules</a></li>
@@ -163,15 +164,13 @@
         
           <li><a href="ddrev.html">ddrev package</a> &raquo;</li>
         
-          <li><a href="ddrev.utils.html">ddrev.utils package</a> &raquo;</li>
-        
-      <li>ddrev.utils.video_utils module</li>
+      <li>ddrev.cli package</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/ddrev.utils.video_utils.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/ddrev.cli.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -184,39 +183,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-ddrev.utils.video_utils">
-<span id="ddrev-utils-video-utils-module"></span><h1>ddrev.utils.video_utils module<a class="headerlink" href="#module-ddrev.utils.video_utils" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="ddrev.utils.video_utils.videocodec2ext">
-<span class="sig-prename descclassname"><span class="pre">ddrev.utils.video_utils.</span></span><span class="sig-name descname"><span class="pre">videocodec2ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">codec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/ddrev/utils/video_utils.html#videocodec2ext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.utils.video_utils.videocodec2ext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert video codec to video extension.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>codec</strong> (<em>Union</em><em>[</em><em>tuple</em><em>, </em><em>str</em><em>]</em>) – Video Codec.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Ideal file extension.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pycharmers.opencv</span> <span class="kn">import</span> <span class="n">videocodec2ext</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">videocodec2ext</span><span class="p">(</span><span class="s2">&quot;MP4V&quot;</span><span class="p">)</span>
-<span class="go">&#39;.mp4&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">videocodec2ext</span><span class="p">(</span><span class="s2">&quot;mp4v&quot;</span><span class="p">)</span>
-<span class="go">&#39;.mov&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">videocodec2ext</span><span class="p">(</span><span class="s2">&quot;VP80&quot;</span><span class="p">)</span>
-<span class="go">&#39;.webm&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">videocodec2ext</span><span class="p">(</span><span class="s2">&quot;XVID&quot;</span><span class="p">)</span>
-<span class="go">&#39;.avi</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">videocodec2ext</span><span class="p">(</span><span class="s2">&quot;☺️&quot;</span><span class="p">)</span>
-<span class="go">&#39;.mp4&#39;</span>
-</pre></div>
+  <div class="section" id="ddrev-cli-package">
+<h1>ddrev.cli package<a class="headerlink" href="#ddrev-cli-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ddrev.cli.arcade_dance.html">ddrev.cli.arcade_dance module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ddrev.cli.video2landmarks.html">ddrev.cli.video2landmarks module</a></li>
+</ul>
 </div>
-</dd></dl>
-
+</div>
+<div class="section" id="module-ddrev.cli">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ddrev.cli" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -226,10 +206,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ddrev.playback.html" class="btn btn-neutral float-right" title="ddrev.playback module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ddrev.cli.arcade_dance.html" class="btn btn-neutral float-right" title="ddrev.cli.arcade_dance module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ddrev.utils.score_utils.html" class="btn btn-neutral" title="ddrev.utils.score_utils module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ddrev.html" class="btn btn-neutral" title="ddrev package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

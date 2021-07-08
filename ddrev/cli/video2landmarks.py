@@ -25,9 +25,9 @@ def video2landmarks(argv=sys.argv[1:]):
     NOTE:
         When you run from the command line, execute as follows::
 
-        $ video2landmarks -V path/to/video.mp4 \\
-                          --model mediapipe \\
-                          --score-method angle
+            $ video2landmarks -V path/to/video.mp4 \\
+                            --model mediapipe \\
+                            --score-method angle
     """
     parser = argparse.ArgumentParser(
         prog="video2landmarks",
