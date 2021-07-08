@@ -11,13 +11,13 @@ from .score_utils import calculate_angle
 
 
 def score2color(
-    score: float, cmap: Union[str, Colormap] = "coolwarm"
+    score: float, cmap: Union[str, Colormap] = "coolwarm_r"
 ) -> Tuple[int, int, int]:
     """Convert score to RGB color.
 
     Args:
         score (float)                        : Score normalized between ``0`` and ``1``.
-        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``"coolwarm"``.
+        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``"coolwarm_r"``.
 
     Returns:
         Tuple[int,int,int]: RGB color corresponding to the score.
@@ -40,7 +40,7 @@ def cmap_indicator_create(
     height: int,
     transpose: bool = False,
     turnover: bool = False,
-    cmap: Union[str, Colormap] = "coolwarm",
+    cmap: Union[str, Colormap] = "coolwarm_r",
 ) -> npt.NDArray[np.uint8]:
     """Create a colormap indicator
 
@@ -48,7 +48,7 @@ def cmap_indicator_create(
         width (int), height (int)             : The size of the created indicator.
         transpose (bool, optional)            : Whether to transpose it or not. Defaults to ``False``.
         turnover (bool, optional)             : Whether to turn it over or not. Defaults to ``False``.
-        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``"coolwarm"``.
+        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``"coolwarm_r"``.
 
     Returns:
         npt.NDArray[np.uint8]: Color map indicator.
@@ -86,7 +86,7 @@ def drawScoreArc(
     inplace: bool = True,
     axes: Tuple[int, int] = (10, 10),
     lineType: int = cv2.LINE_8,
-    cmap: Union[str, Colormap] = "coolwarm",
+    cmap: Union[str, Colormap] = "coolwarm_r",
     max_score: Optional[float] = None,
     **kwargs,
 ) -> npt.NDArray[np.uint8]:

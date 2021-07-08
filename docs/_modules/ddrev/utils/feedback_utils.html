@@ -169,13 +169,13 @@
 
 
 <div class="viewcode-block" id="score2color"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.score2color">[docs]</a><span class="k">def</span> <span class="nf">score2color</span><span class="p">(</span>
-    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm_r&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Convert score to RGB color.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        score (float)                        : Score normalized between ``0`` and ``1``.</span>
-<span class="sd">        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm&quot;``.</span>
+<span class="sd">        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm_r&quot;``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Tuple[int,int,int]: RGB color corresponding to the score.</span>
@@ -198,7 +198,7 @@
     <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">transpose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">turnover</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm_r&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Create a colormap indicator</span>
 
@@ -206,7 +206,7 @@
 <span class="sd">        width (int), height (int)             : The size of the created indicator.</span>
 <span class="sd">        transpose (bool, optional)            : Whether to transpose it or not. Defaults to ``False``.</span>
 <span class="sd">        turnover (bool, optional)             : Whether to turn it over or not. Defaults to ``False``.</span>
-<span class="sd">        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm&quot;``.</span>
+<span class="sd">        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm_r&quot;``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        npt.NDArray[np.uint8]: Color map indicator.</span>
@@ -244,7 +244,7 @@
     <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">axes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
     <span class="n">lineType</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_8</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm_r&quot;</span><span class="p">,</span>
     <span class="n">max_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
