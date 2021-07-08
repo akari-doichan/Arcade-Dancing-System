@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ddrev.utils.feedback_utils &mdash; Arcade Dance System  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="Arcade Dance System  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Arcade Dance System
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../ddrev.html">ddrev package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Arcade Dance System</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ddrev.utils.feedback_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ddrev.utils.feedback_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">Colormap</span>
+
+<span class="kn">from</span> <span class="nn">.score_utils</span> <span class="kn">import</span> <span class="n">calculate_angle</span>
+
+
+<div class="viewcode-block" id="score2color"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.score2color">[docs]</a><span class="k">def</span> <span class="nf">score2color</span><span class="p">(</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert score to RGB color.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        score (float)                        : Score normalized between ``0`` and ``1``.</span>
+<span class="sd">        cmap (Union[str,Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm&quot;``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[int,int,int]: RGB color corresponding to the score.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.utils import score2color</span>
+<span class="sd">        &gt;&gt;&gt; score2color(score=0.2)</span>
+<span class="sd">        (123, 158, 248)</span>
+<span class="sd">        &gt;&gt;&gt; score2color(score=0.5)</span>
+<span class="sd">        (221, 220, 219)</span>
+<span class="sd">        &gt;&gt;&gt; score2color(score=1)</span>
+<span class="sd">        (59, 77, 193)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">cmap</span><span class="p">(</span><span class="n">score</span><span class="p">)][:</span><span class="mi">3</span><span class="p">])</span>  <span class="c1"># [::-1]</span></div>
+
+
+<div class="viewcode-block" id="drawScoreArc"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.drawScoreArc">[docs]</a><span class="k">def</span> <span class="nf">drawScoreArc</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">axes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">lineType</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_8</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span>
+    <span class="n">max_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])        : Input image.</span>
+<span class="sd">        score (float)                        : Score value to describe.</span>
+<span class="sd">        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.</span>
+<span class="sd">        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.</span>
+<span class="sd">        axes (Tuple[int, int], optional)     : [description]. Defaults to ``(10, 10)``.</span>
+<span class="sd">        lineType (int, optional)             : [description]. Defaults to ``cv2.LINE_8``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: An edited image.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.utils import drawScoreArc, calculate_angle</span>
+<span class="sd">        &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">        &gt;&gt;&gt; A = np.asarray([0.2, 0.9])</span>
+<span class="sd">        &gt;&gt;&gt; B = np.asarray([0.8, 0.6])</span>
+<span class="sd">        &gt;&gt;&gt; C = np.asarray([0.3, 0.5])</span>
+<span class="sd">        &gt;&gt;&gt; frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)</span>
+<span class="sd">        &gt;&gt;&gt; H, W = frame.shape[:2]</span>
+<span class="sd">        &gt;&gt;&gt; drawScoreArc(frame, calculate_angle(A,B,C), coords=(A,B,C), max_score=360.)</span>
+<span class="sd">        &gt;&gt;&gt; drawScoreArc(frame, calculate_angle(A,C,B), coords=(A,C,B), max_score=360.)</span>
+<span class="sd">        &gt;&gt;&gt; drawScoreArc(frame, calculate_angle(B,A,C), coords=(B,A,C), max_score=360.)</span>
+<span class="sd">        &gt;&gt;&gt; pX, pY = (None, None)</span>
+<span class="sd">        &gt;&gt;&gt; for name, (x, y) in zip(list(&quot;ABCA&quot;), [A,B,C,A]):</span>
+<span class="sd">        ...     X, Y = (int(x * W), int(y * H))</span>
+<span class="sd">        ...     ax.scatter(X, Y, color=&quot;red&quot;)</span>
+<span class="sd">        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color=&quot;red&quot;)</span>
+<span class="sd">        ...     if pX is not None:</span>
+<span class="sd">        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))</span>
+<span class="sd">        ...     pX, pY = (X, Y)</span>
+<span class="sd">        &gt;&gt;&gt; ax.imshow(frame)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">coords</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">cx_slide</span> <span class="o">=</span> <span class="p">(</span><span class="n">cx</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span>  <span class="c1"># Slide the center point in the x-axis direction</span>
+    <span class="n">startAngle</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">-</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="n">cx_slide</span><span class="p">,</span> <span class="o">*</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="o">*</span><span class="n">coords</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">score</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">max_score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">/=</span> <span class="n">max_score</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">ellipse</span><span class="p">(</span>
+        <span class="n">img</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cx</span> <span class="o">*</span> <span class="n">W</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">H</span><span class="p">)),</span>
+        <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+        <span class="n">angle</span><span class="o">=</span><span class="n">startAngle</span><span class="p">,</span>
+        <span class="n">startAngle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">endAngle</span><span class="o">=</span><span class="n">angle</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">score2color</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span>
+        <span class="n">thickness</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">lineType</span><span class="o">=</span><span class="n">lineType</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="putScoreText"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.putScoreText">[docs]</a><span class="k">def</span> <span class="nf">putScoreText</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">fontFace</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_PLAIN</span><span class="p">,</span>
+    <span class="n">fontScale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Write the ``score`` at the midpoint of both ends of the coordinates (``coords``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])        : Input image.</span>
+<span class="sd">        score (float)                        : Score value to describe.</span>
+<span class="sd">        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.</span>
+<span class="sd">        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.</span>
+<span class="sd">        fontFace (int, optional)             : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.</span>
+<span class="sd">        fontScale (int, optional)            : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.</span>
+<span class="sd">        color (Tuple[int,int,int], optional) : Text color. Defaults to ``(0,255,255)``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: An edited image.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.utils import putScoreText, calculate_angle</span>
+<span class="sd">        &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">        &gt;&gt;&gt; coords = [</span>
+<span class="sd">        ...     np.asarray([0.2, 0.9]),</span>
+<span class="sd">        ...     np.asarray([0.8, 0.6]),</span>
+<span class="sd">        ...     np.asarray([0.3, 0.5]),</span>
+<span class="sd">        &gt;&gt;&gt; ]</span>
+<span class="sd">        &gt;&gt;&gt; frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)</span>
+<span class="sd">        &gt;&gt;&gt; H, W = frame.shape[:2]</span>
+<span class="sd">        &gt;&gt;&gt; putScoreText(frame, calculate_angle(*coords), coords=coords)</span>
+<span class="sd">        &gt;&gt;&gt; pX, pY = (None, None)</span>
+<span class="sd">        &gt;&gt;&gt; for name, (x, y) in zip(list(&quot;ABC&quot;), coords):</span>
+<span class="sd">        ...     X, Y = (int(x * W), int(y * H))</span>
+<span class="sd">        ...     ax.scatter(X, Y, color=&quot;red&quot;)</span>
+<span class="sd">        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color=&quot;red&quot;)</span>
+<span class="sd">        ...     if pX is not None:</span>
+<span class="sd">        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))</span>
+<span class="sd">        ...     pX, pY = (X, Y)</span>
+<span class="sd">        &gt;&gt;&gt; ax.imshow(frame)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span>
+        <span class="n">img</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">org</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">W</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">H</span><span class="p">)),</span>
+        <span class="n">fontFace</span><span class="o">=</span><span class="n">fontFace</span><span class="p">,</span>
+        <span class="n">fontScale</span><span class="o">=</span><span class="n">fontScale</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, akari-doichan.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/custom.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

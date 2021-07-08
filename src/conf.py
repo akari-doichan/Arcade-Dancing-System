@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.napoleon',         # Support for NumPy and Google style docstrings
     'sphinx.ext.githubpages',      # Publish HTML docs in GitHub Pages
     'sphinx.ext.autosectionlabel', # Allow reference sections using its title
+    'matplotlib.sphinxext.plot_directive',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,8 +78,7 @@ autodoc_member_order = "bysource"
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-# sphinxext.op
-# engraph
+# [opengraph]
 ogp_site_url = "https://iwasakishuto.github.io/Python-Charmers/"
 ogp_image = "https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png"
 ogp_description_length = 200
@@ -89,3 +89,8 @@ ogp_custom_meta_tags = [
     '<meta name="twitter:card" content="summary">',
     f'<meta name="twitter:image:src" content="{ogp_image}">',
 ]
+
+# [matplotlib]
+plot_include_source         = True   # Default value for the include-source option.
+plot_html_show_source_link  = False  # Whether to show a link to the source in HTML.
+plot_html_show_formats      = False  # Whether to show links to the files in HTML.

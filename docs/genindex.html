@@ -34,6 +34,8 @@
   
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
+    <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
+  
     <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
 
@@ -258,13 +260,20 @@
         <li><a href="ddrev.recorder.html#module-ddrev.recorder">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ddrev.utils
 
       <ul>
         <li><a href="ddrev.utils.html#module-ddrev.utils">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    ddrev.utils.feedback_utils
+
+      <ul>
+        <li><a href="ddrev.utils.feedback_utils.html#module-ddrev.utils.feedback_utils">module</a>
 </li>
       </ul></li>
       <li>
@@ -302,6 +311,10 @@
       <li><a href="ddrev.realtime.html#ddrev.realtime.VideoCapture.describe">describe() (ddrev.realtime.VideoCapture method)</a>
 </li>
       <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.draw_landmarks">draw_landmarks() (ddrev.poses.mediapipe.mpPoseEstimator method)</a>
+</li>
+      <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.draw_score">draw_score() (ddrev.poses.mediapipe.mpPoseEstimator static method)</a>
+</li>
+      <li><a href="ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.drawScoreArc">drawScoreArc() (in module ddrev.utils.feedback_utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -359,6 +372,8 @@
 </li>
         <li><a href="ddrev.utils.html#module-ddrev.utils">ddrev.utils</a>
 </li>
+        <li><a href="ddrev.utils.feedback_utils.html#module-ddrev.utils.feedback_utils">ddrev.utils.feedback_utils</a>
+</li>
         <li><a href="ddrev.utils.generic_utils.html#module-ddrev.utils.generic_utils">ddrev.utils.generic_utils</a>
 </li>
         <li><a href="ddrev.utils.json_utils.html#module-ddrev.utils.json_utils">ddrev.utils.json_utils</a>
@@ -390,16 +405,18 @@
 </li>
       <li><a href="ddrev.playback.html#ddrev.playback.PlayBack">PlayBack (class in ddrev.playback)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.process">process() (ddrev.poses.mediapipe.mpPoseEstimator method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ddrev.poses.base.html#ddrev.poses.base.BasePoseEstimator.process_frame">process_frame() (ddrev.poses.base.BasePoseEstimator method)</a>
 
       <ul>
         <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.process_frame">(ddrev.poses.mediapipe.mpPoseEstimator method)</a>
 </li>
       </ul></li>
+      <li><a href="ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.putScoreText">putScoreText() (in module ddrev.utils.feedback_utils)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -416,12 +433,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ddrev.utils.json_utils.html#ddrev.utils.json_utils.save_json">save_json() (in module ddrev.utils.json_utils)</a>
 </li>
-      <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec">set_connection_drawing_spec() (ddrev.poses.mediapipe.mpPoseEstimator method)</a>
+      <li><a href="ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.score2color">score2color() (in module ddrev.utils.feedback_utils)</a>
 </li>
-      <li><a href="ddrev.playback.html#ddrev.playback.PlayBack.set_fps">set_fps() (ddrev.playback.PlayBack method)</a>
+      <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.set_connection_drawing_spec">set_connection_drawing_spec() (ddrev.poses.mediapipe.mpPoseEstimator method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ddrev.playback.html#ddrev.playback.PlayBack.set_fps">set_fps() (ddrev.playback.PlayBack method)</a>
+</li>
       <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.set_landmark_drawing_spec">set_landmark_drawing_spec() (ddrev.poses.mediapipe.mpPoseEstimator method)</a>
 </li>
       <li><a href="ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.string2landmarks">string2landmarks() (ddrev.poses.mediapipe.mpPoseEstimator static method)</a>

@@ -7,6 +7,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   ddrev.utils.feedback_utils
    ddrev.utils.generic_utils
    ddrev.utils.json_utils
    ddrev.utils.score_utils

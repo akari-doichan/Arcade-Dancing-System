@@ -34,6 +34,8 @@
   
     <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   
+    <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+  
     <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
 
@@ -155,25 +157,27 @@
             
   <h1>Source code for ddrev.utils.score_utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+
+<span class="kn">from</span> <span class="nn">._colorings</span> <span class="kn">import</span> <span class="n">toRED</span>
 
 
 <div class="viewcode-block" id="calculate_angle"><a class="viewcode-back" href="../../../ddrev.utils.score_utils.html#ddrev.utils.score_utils.calculate_angle">[docs]</a><span class="k">def</span> <span class="nf">calculate_angle</span><span class="p">(</span>
     <span class="n">a</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">b</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">c</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-    <span class="n">unit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;radian&quot;</span><span class="p">,</span>
+    <span class="n">unit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;degree&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Calculate angle from 3 coordinates.</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the counterclockwise angle (``0 ~ 360``) from ``a`` through ``b`` to ``c``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        b (npt.NDArray[float])  : A coordinate of a center point.</span>
 <span class="sd">        a,c (npt.NDArray[float]): Coordinates for Both end points.</span>
-<span class="sd">        unit (str)              : Angle unit. Defaults to ``&quot;radian&quot;``.</span>
+<span class="sd">        unit (str)              : Angle unit. Defaults to ``&quot;degree&quot;``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        float: Angles of ``a``, ``b``, ``c`` around ``b``.</span>
@@ -186,15 +190,25 @@
 <span class="sd">        ...     np.asarray([0, 0]),</span>
 <span class="sd">        ...     np.asarray([1, 0]),</span>
 <span class="sd">        &gt;&gt;&gt; ]</span>
-<span class="sd">        &gt;&gt;&gt; calculate_angle(*coords, unit=&quot;degree&quot;)</span>
-<span class="sd">        90.0</span>
 <span class="sd">        &gt;&gt;&gt; calculate_angle(*coords)</span>
+<span class="sd">        90.0</span>
+<span class="sd">        &gt;&gt;&gt; calculate_angle(*coords, unit=&quot;radian&quot;)</span>
 <span class="sd">        1.5707963267948966</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">vec_a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
     <span class="n">vec_c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="n">b</span>
-    <span class="n">cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_c</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_c</span><span class="p">))</span>
-    <span class="n">rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Calclulate angle of </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">-dimension data from 0 to 180 degrees.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_c</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_c</span><span class="p">))</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">vec_a</span><span class="p">,</span> <span class="n">vec_c</span><span class="p">)</span>
+        <span class="n">det</span> <span class="o">=</span> <span class="n">vec_c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">vec_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vec_c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># determinant</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">det</span><span class="p">,</span> <span class="n">dot</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rad</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">rad</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;degree&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">rad</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rad</span></div>
