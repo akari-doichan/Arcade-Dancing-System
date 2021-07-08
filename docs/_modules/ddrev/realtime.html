@@ -158,24 +158,27 @@
   <h1>Source code for ddrev.realtime</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 
+<span class="kn">from</span> <span class="nn">.recorder</span> <span class="kn">import</span> <span class="n">copyVideoSpec</span>
 <span class="kn">from</span> <span class="nn">.utils._colorings</span> <span class="kn">import</span> <span class="n">toGREEN</span><span class="p">,</span> <span class="n">toRED</span>
 
 
 <div class="viewcode-block" id="VideoCapture"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture">[docs]</a><span class="k">class</span> <span class="nc">VideoCapture</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrapper class for ``cv2.VideoCapture``.</span>
 
-<span class="sd">    Attributes:</span>
-<span class="sd">        tm (cv2.TickMeter) :</span>
-<span class="sd">        max_count (int)    :</span>
+<span class="sd">    Args:</span>
+<span class="sd">        out_path (Optional[str], optional) : The path to which the ``cv2.VideoWriter`` writes video. Defaults to ``None``.</span>
+<span class="sd">        codec (str, optional)              : Video Codec. Defaults to ``&quot;MP4V&quot;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">max_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MP4V&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -183,15 +186,21 @@
                     <span class="s2">&quot;VideoCapture is not opened. Please make sure the device number is correct.&quot;</span>
                 <span class="p">)</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_VideoWriter</span><span class="p">(</span><span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_path</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="c1">#     self.tm = cv2.TickMeter()</span>
-    <span class="c1">#     self.max_count = max_count</span>
+<div class="viewcode-block" id="VideoCapture.set_VideoWriter"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture.set_VideoWriter">[docs]</a>    <span class="k">def</span> <span class="nf">set_VideoWriter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">codec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MP4V&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set a ``cv2.VideoWriter`` using :meth:`copyVideoSpec &lt;ddrev.recorder.copyVideoSpec&gt;`</span>
 
-    <span class="c1"># def calc_fps(self):</span>
-    <span class="c1">#     self.tm.stop()</span>
-    <span class="c1">#     fps = self.max_count / self.tm.getTimeSec()</span>
-    <span class="c1">#     self.tm.reset()</span>
-    <span class="c1">#     self.tm.start()</span>
+<span class="sd">        Args:</span>
+<span class="sd">            out_path (str)        : The path to which the ``cv2.VideoWriter`` writes video.</span>
+<span class="sd">            codec (str, optional) : Video Codec. Defaults to ``&quot;MP4V&quot;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_path</span> <span class="o">=</span> <span class="n">copyVideoSpec</span><span class="p">(</span>
+            <span class="n">cap</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="VideoCapture.check_device"><a class="viewcode-back" href="../../ddrev.realtime.html#ddrev.realtime.VideoCapture.check_device">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">check_device</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -275,11 +284,15 @@
             <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
             <span class="n">frame</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
             <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">winname</span><span class="o">=</span><span class="n">winname</span><span class="p">,</span> <span class="n">mat</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">key</span><span class="p">))</span><span class="si">}</span><span class="s2"> was keyed in.&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">stop_keys</span><span class="p">:</span>
                     <span class="k">break</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="n">winname</span><span class="p">)</span></div></div>
 </pre></div>
 

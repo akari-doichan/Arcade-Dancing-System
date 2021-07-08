@@ -182,25 +182,27 @@
 <span id="ddrev-realtime-module"></span><h1>ddrev.realtime module<a class="headerlink" href="#module-ddrev.realtime" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="ddrev.realtime.VideoCapture">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ddrev.realtime.</span></span><span class="sig-name descname"><span class="pre">VideoCapture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_count</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddrev/realtime.html#VideoCapture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.realtime.VideoCapture" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ddrev.realtime.</span></span><span class="sig-name descname"><span class="pre">VideoCapture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'MP4V'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ddrev/realtime.html#VideoCapture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.realtime.VideoCapture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">cv2.VideoCapture</span></code></p>
 <p>Wrapper class for <code class="docutils literal notranslate"><span class="pre">cv2.VideoCapture</span></code>.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="ddrev.realtime.VideoCapture.tm">
-<span class="sig-name descname"><span class="pre">tm</span></span><a class="headerlink" href="#ddrev.realtime.VideoCapture.tm" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>cv2.TickMeter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_path</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The path to which the <code class="docutils literal notranslate"><span class="pre">cv2.VideoWriter</span></code> writes video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video Codec. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;MP4V&quot;</span></code>.</p></li>
+</ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="ddrev.realtime.VideoCapture.max_count">
-<span class="sig-name descname"><span class="pre">max_count</span></span><a class="headerlink" href="#ddrev.realtime.VideoCapture.max_count" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ddrev.realtime.VideoCapture.set_VideoWriter">
+<span class="sig-name descname"><span class="pre">set_VideoWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'MP4V'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/ddrev/realtime.html#VideoCapture.set_VideoWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ddrev.realtime.VideoCapture.set_VideoWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a <code class="docutils literal notranslate"><span class="pre">cv2.VideoWriter</span></code> using <a class="reference internal" href="ddrev.recorder.html#ddrev.recorder.copyVideoSpec" title="ddrev.recorder.copyVideoSpec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">copyVideoSpec</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>out_path</strong> (<em>str</em>) – The path to which the <code class="docutils literal notranslate"><span class="pre">cv2.VideoWriter</span></code> writes video.</p></li>
+<li><p><strong>codec</strong> (<em>str</em><em>, </em><em>optional</em>) – Video Codec. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;MP4V&quot;</span></code>.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
