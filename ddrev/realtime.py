@@ -119,6 +119,7 @@ class VideoCapture(cv2.VideoCapture):
                 f"No video processing function {toGREEN('function')} was given, so do nothing (using {toGREEN('self._do_nothing')} instead.)"
             )
             function = self._do_nothing
+        cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
         while True:
             is_ok, frame = self.read()
             if (not is_ok) or (frame is None):
@@ -132,6 +133,15 @@ class VideoCapture(cv2.VideoCapture):
                 print(f"{toGREEN(chr(key))} was keyed in.")
                 if key in stop_keys:
                     break
+                elif key == ord("f"):
+                    cv2.setWindowProperty(
+                        winname=winname,
+                        prop_id=cv2.WND_PROP_FULLSCREEN,
+                        prop_value=1-cv2.getWindowProperty(
+                            winname=winname,
+                            prop_id=cv2.WND_PROP_FULLSCREEN,
+                        )
+                    )
         self.release()
         if self.out is not None:
             self.out.release()

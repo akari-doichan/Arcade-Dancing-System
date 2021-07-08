@@ -5,6 +5,7 @@
 # <--- Added by iwasakishuto ---
 *.DS_Store
 .vscode
+arcade-dance.*
 # --- Added by iwasakishuto ---
 
 # Byte-compiled / optimized / DLL files

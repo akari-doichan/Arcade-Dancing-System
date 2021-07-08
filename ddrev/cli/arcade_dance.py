@@ -202,6 +202,7 @@ def arcade_dance(argv=sys.argv[1:]):
     * Color Map: {toGREEN(cmap_name)}
         * Size (W,H) : ({toGREEN(cmap_w)},{toGREEN(cmap_h)}) @ (x={toGREEN(cmap_x)},y={toGREEN(cmap_y)})
     * Key Operation
+        * {toGREEN('f')} -> Set the window fullscreen.
         * {toGREEN('r')} -> Restart the instructor video.
         * {toGREEN('d')} -> Increase the speed of the instructor video.
         * {toGREEN('s')} -> Slow donw the speed of the instructor video.
