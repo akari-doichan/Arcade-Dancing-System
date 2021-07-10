@@ -1,23 +1,23 @@
-#!/bin/bash	
+#!/bin/bash
 # chmod +x docs-format.sh
 # ./docs-format.sh
 
-function logging() {	
-  echo -e "\033[0;32m$1\033[0m"	
-}	
-function whereIam() {	
-  echo -e "@ \033[07m`pwd`\033[0m"	
-}	
+function logging() {
+  echo -e "\033[0;32m$1\033[0m"
+}
+function whereIam() {
+  echo -e "@ \033[07m`pwd`\033[0m"
+}
 
-MODULE_DIRNAME="ddrev"	
-HERE=$(cd $(dirname $0);pwd)	
+MODULE_DIRNAME="ddrev"s
+HERE=$(cd $(dirname $0);pwd)
 
-logging "cd $HERE"	
-cd $HERE	
+logging "cd $HERE"
+cd $HERE
 whereIam
 
 # flake8
-logging "$ poetry run flake8 ${MODULE_DIRNAME} --count --select=E9,F63,F7,F82 --show-source --statistics"	
+logging "$ poetry run flake8 ${MODULE_DIRNAME} --count --select=E9,F63,F7,F82 --show-source --statistics"
 poetry run flake8 $MODULE_DIRNAME --count --select=E9,F63,F7,F82 --show-source --statistics
 # isort
 logging "$ poetry run isort ${MODULE_DIRNAME}"

@@ -19,7 +19,7 @@ $ pyenv install 3.8.9
 $ pyenv local 3.8.9
 $ python -V
 Python 3.8.9
-$ poetry install 
+$ poetry install
 ```
 
 ## Pose Detection
@@ -34,6 +34,8 @@ You can easily do some process by executing the following command.
 
 #### Covert from Video to Landmarks
 
+You can convert from `data/sample-instructor.mp4` to `data/sample-instructor_mediapipe_angle.json` by the following command:
+
 ```sh
 $ poetry run video2landmarks -V data/sample-instructor.mp4 \
                              --model mediapipe \
@@ -43,9 +45,11 @@ $ poetry run video2landmarks -V data/sample-instructor.mp4 \
 #### Realtime dance with instructor's video
 
 ```sh
-$ poetry run arcade-dance -V data/sample-instructor_mediapipe_angle.json \
+$ poetry run arcade-dance -J data/sample-instructor_mediapipe_angle.json \
+                          --max-score 90 \
+                          --instructor-xywh "[-410,10,400,400]" \
                           --codec MP4V \
-                          --record H264
+                          --record
 ```
 
 ## Generate Documentations
