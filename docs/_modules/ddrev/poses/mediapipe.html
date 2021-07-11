@@ -168,6 +168,7 @@
 
 <span class="sd">.. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">cv2</span>
@@ -176,7 +177,7 @@
 <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
 <span class="kn">from</span> <span class="nn">mediapipe.framework.formats.landmark_pb2</span> <span class="kn">import</span> <span class="n">NormalizedLandmarkList</span>
 
-<span class="kn">from</span> <span class="nn">..utils._exceptions</span> <span class="kn">import</span> <span class="ne">KeyError</span>
+<span class="kn">from</span> <span class="nn">..utils._colorings</span> <span class="kn">import</span> <span class="n">toGREEN</span>
 <span class="kn">from</span> <span class="nn">..utils.feedback_utils</span> <span class="kn">import</span> <span class="n">drawScoreArc</span><span class="p">,</span> <span class="n">putScoreText</span>
 <span class="kn">from</span> <span class="nn">..utils.score_utils</span> <span class="kn">import</span> <span class="n">calculate_angle</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BasePoseEstimator</span>
@@ -184,7 +185,13 @@
 <span class="n">mp_drawing</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span>
 <span class="n">mp_pose</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">pose</span>
 
+<span class="n">POSE_CONNECTIONS</span> <span class="o">=</span> <span class="n">mp_pose</span><span class="o">.</span><span class="n">POSE_CONNECTIONS</span>  <span class="c1">#</span>
+<span class="n">BODY_CONNECTIONS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">[(</span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">POSE_CONNECTIONS</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="ow">and</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">)</span>  <span class="c1"># Without Face.</span>
+
 <span class="n">VISIBILITY_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">PRESENCE_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 
 <div class="viewcode-block" id="mpPoseEstimator"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator">[docs]</a><span class="k">class</span> <span class="nc">mpPoseEstimator</span><span class="p">(</span><span class="n">mp_pose</span><span class="o">.</span><span class="n">Pose</span><span class="p">,</span> <span class="n">BasePoseEstimator</span><span class="p">):</span>
@@ -228,7 +235,7 @@
         <span class="n">min_tracking_confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
         <span class="n">landmark_drawing_specs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
         <span class="n">connection_drawing_specs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize an instance of ``mp.solutions.poses.Pose``.</span>
 
@@ -317,14 +324,16 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
         <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">connections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span>
         <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Process frame in while-loop in :meth:`realtime_process &lt;ddrev.realtime.VideoCapture.realtime_process&gt;`.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.</span>
 <span class="sd">            key (int, optional)           : An integer representing the Unicode character. Defaults to ``1``.</span>
+<span class="sd">            connections (str, optional)   : Type of connection to draw. Please choose from ``[&quot;body&quot;, &quot;pose&quot;]``. Defaults to ``&quot;body&quot;``.</span>
 <span class="sd">            inplace (bool, optional)      : Whether frame is edited (drawn ``landmarks``) in place. Defaults to ``True``.</span>
 
 <span class="sd">        Returns:</span>
@@ -348,13 +357,16 @@
 <span class="sd">            &gt;&gt;&gt; fig.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">landmarks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span> <span class="n">connections</span><span class="o">=</span><span class="n">connections</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">frame</span></div>
 
 <div class="viewcode-block" id="mpPoseEstimator.draw_landmarks"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.draw_landmarks">[docs]</a>    <span class="k">def</span> <span class="nf">draw_landmarks</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
         <span class="n">landmarks</span><span class="p">:</span> <span class="n">NormalizedLandmarkList</span><span class="p">,</span>
+        <span class="n">connections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span>
         <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Draws the landmarks and the connections on the image.</span>
@@ -362,6 +374,7 @@
 <span class="sd">        Args:</span>
 <span class="sd">            frame (npt.NDArray[np.uint8])      : A three channel ``RGB`` image represented as numpy ndarray.</span>
 <span class="sd">            landmarks (NormalizedLandmarkList) : A normalized landmark list proto message to be annotated on the image.</span>
+<span class="sd">            connections (str, optional)        : Type of connection to draw. Please choose from ``[&quot;body&quot;, &quot;pose&quot;]``. Defaults to ``&quot;body&quot;``.</span>
 <span class="sd">            inplace (bool, optional)           : Whether frame is edited (drawn ``landmarks``) in place. Defaults to ``True``.</span>
 
 <span class="sd">        Returns:</span>
@@ -386,13 +399,68 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
             <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">mp_drawing</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span>
-            <span class="n">image</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
-            <span class="n">landmark_list</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span>
-            <span class="n">connections</span><span class="o">=</span><span class="n">mp_pose</span><span class="o">.</span><span class="n">POSE_CONNECTIONS</span><span class="p">,</span>
-            <span class="n">landmark_drawing_spec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landmark_drawing_spec</span><span class="p">,</span>
-            <span class="n">connection_drawing_spec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connection_drawing_spec</span><span class="p">,</span>
-        <span class="p">)</span>
+
+        <span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">connections</span> <span class="o">==</span> <span class="s2">&quot;pose&quot;</span><span class="p">:</span>
+            <span class="n">connection_set</span> <span class="o">=</span> <span class="n">POSE_CONNECTIONS</span>
+            <span class="n">landmark_lb</span><span class="p">,</span> <span class="n">landmark_ub</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>  <span class="c1"># len(POSE_CONNECTIONS)=35</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">connection_set</span> <span class="o">=</span> <span class="n">BODY_CONNECTIONS</span>
+            <span class="n">landmark_lb</span><span class="p">,</span> <span class="n">landmark_ub</span> <span class="o">=</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+
+        <span class="c1"># mp_drawing.draw_landmarks</span>
+        <span class="k">if</span> <span class="n">landmarks</span><span class="p">:</span>
+            <span class="n">frame_rows</span><span class="p">,</span> <span class="n">frame_cols</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">idx_to_coordinates</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">landmark</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">landmarks</span><span class="o">.</span><span class="n">landmark</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">landmark_lb</span> <span class="o">&lt;=</span> <span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">landmark_ub</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">landmark</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;visibility&quot;</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">landmark</span><span class="o">.</span><span class="n">visibility</span> <span class="o">&lt;</span> <span class="n">VISIBILITY_THRESHOLD</span>
+                    <span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                        <span class="n">landmark</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;presence&quot;</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">landmark</span><span class="o">.</span><span class="n">presence</span> <span class="o">&lt;</span> <span class="n">PRESENCE_THRESHOLD</span>
+                    <span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">landmark_px</span> <span class="o">=</span> <span class="n">mp_drawing</span><span class="o">.</span><span class="n">_normalized_to_pixel_coordinates</span><span class="p">(</span>
+                        <span class="n">normalized_x</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                        <span class="n">normalized_y</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                        <span class="n">image_width</span><span class="o">=</span><span class="n">frame_cols</span><span class="p">,</span>
+                        <span class="n">image_height</span><span class="o">=</span><span class="n">frame_rows</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">landmark_px</span><span class="p">:</span>
+                        <span class="n">idx_to_coordinates</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">landmark_px</span>
+            <span class="k">if</span> <span class="n">connection_set</span><span class="p">:</span>
+                <span class="n">num_landmarks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">landmarks</span><span class="o">.</span><span class="n">landmark</span><span class="p">)</span>
+                <span class="c1"># Draws the connection if the start and end landmarks are both visible.</span>
+                <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">connection_set</span><span class="p">:</span>
+                    <span class="n">start_idx</span><span class="p">,</span> <span class="n">end_idx</span> <span class="o">=</span> <span class="n">connection</span>
+                    <span class="c1"># if not (</span>
+                    <span class="c1">#     0 &lt;= start_idx &lt; num_landmarks and 0 &lt;= end_idx &lt; num_landmarks</span>
+                    <span class="c1"># ):</span>
+                    <span class="c1">#     raise ValueError(</span>
+                    <span class="c1">#         f&quot;Landmark index is out of range. Invalid connection from landmark #{toGREEN(start_idx)} to landmark #{toGREEN(end_idx)}.&quot;</span>
+                    <span class="c1">#     )</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">start_idx</span> <span class="ow">in</span> <span class="n">idx_to_coordinates</span>
+                        <span class="ow">and</span> <span class="n">end_idx</span> <span class="ow">in</span> <span class="n">idx_to_coordinates</span>
+                    <span class="p">):</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                            <span class="n">img</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+                            <span class="n">pt1</span><span class="o">=</span><span class="n">idx_to_coordinates</span><span class="p">[</span><span class="n">start_idx</span><span class="p">],</span>
+                            <span class="n">pt2</span><span class="o">=</span><span class="n">idx_to_coordinates</span><span class="p">[</span><span class="n">end_idx</span><span class="p">],</span>
+                            <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connection_drawing_spec</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                            <span class="n">thickness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connection_drawing_spec</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span>
+                        <span class="p">)</span>
+            <span class="c1"># Draws landmark points after finishing the connection lines, which is aesthetically better.</span>
+            <span class="k">for</span> <span class="n">landmark_px</span> <span class="ow">in</span> <span class="n">idx_to_coordinates</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
+                    <span class="n">img</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+                    <span class="n">center</span><span class="o">=</span><span class="n">landmark_px</span><span class="p">,</span>
+                    <span class="n">radius</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landmark_drawing_spec</span><span class="o">.</span><span class="n">circle_radius</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landmark_drawing_spec</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+                    <span class="n">thickness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landmark_drawing_spec</span><span class="o">.</span><span class="n">thickness</span><span class="p">,</span>
+                <span class="p">)</span>
         <span class="k">return</span> <span class="n">frame</span></div>
 
 <div class="viewcode-block" id="mpPoseEstimator.landmarks2string"><a class="viewcode-back" href="../../../ddrev.poses.mediapipe.html#ddrev.poses.mediapipe.mpPoseEstimator.landmarks2string">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -504,7 +572,7 @@
             <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">drawScoreArc</span><span class="p">,</span>
         <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Draw ``score`` in ``frame`` using ``draw_func``</span>
 

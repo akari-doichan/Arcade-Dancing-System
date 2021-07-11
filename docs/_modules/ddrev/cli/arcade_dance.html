@@ -184,6 +184,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        -J/--json (str)                         : A path to an instructor video json file.</span>
 <span class="sd">        -C/--cam (int, optional)                : Your camera device number. Defaults to ``0``.</span>
+<span class="sd">        --connections (str)                     : Type of connection to draw. Please choose from ``[&quot;body&quot;, &quot;pose&quot;]``. Defaults to ``&quot;body&quot;``.</span>
 <span class="sd">        --instructor-xywh (List[int], optional) : The size and location of instructor video. Defaults to ``None``.</span>
 <span class="sd">        --axes (List[int])                      : Half of the size of the ellipse main axes. Defaults to ``[30, 30]``.</span>
 <span class="sd">        --max-score (flaot, optional)           : If the score (angle difference with the instructor) is higher than this value, it will be rounded to this value. Defaults to ``90.``.</span>
@@ -197,11 +198,12 @@
 <span class="sd">    NOTE:</span>
 <span class="sd">        When you run from the command line, execute as follows::</span>
 
-<span class="sd">            $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\</span>
-<span class="sd">                        --max-score 90 \\</span>
-<span class="sd">                        --instructor-xywh &quot;[-410,10,400,400]&quot; \\</span>
-<span class="sd">                        --codec MP4V \\</span>
-<span class="sd">                        --record</span>
+<span class="sd">        $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\</span>
+<span class="sd">                       --connections body \\</span>
+<span class="sd">                       --max-score 90 \\</span>
+<span class="sd">                       --instructor-xywh &quot;[-410,10,400,400]&quot; \\</span>
+<span class="sd">                       --codec MP4V \\</span>
+<span class="sd">                       --record</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;dance&quot;</span><span class="p">,</span>
@@ -221,6 +223,13 @@
         <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Your camera device number. Defaults to 0.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--connections&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="s2">&quot;pose&quot;</span><span class="p">],</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Type of connection to draw. Please choose from [body, pose]. Defaults to body.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--instructor-xywh&quot;</span><span class="p">,</span>
@@ -315,6 +324,7 @@
     <span class="n">angle_points</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;angle_points&quot;</span><span class="p">]</span>
     <span class="n">angle_unit</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;angle_unit&quot;</span><span class="p">]</span>
     <span class="n">estimator</span> <span class="o">=</span> <span class="n">poses</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">connections</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">connections</span>
     <span class="n">axes</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">axes</span>
 
     <span class="c1"># Color Map Indicator</span>
@@ -348,6 +358,7 @@
     <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;[Arcade Dancing System]</span>
 <span class="s2">    * Model: </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
 <span class="s2">    * Scoring Method: </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">score_method</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">    * Connection Type: </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">connections</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
 <span class="s2">    * Web Camera</span>
 <span class="s2">        * Camera ID : </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cam</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
 <span class="s2">        * Size (W,H): (</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="si">}</span><span class="s2">)</span>
@@ -360,6 +371,7 @@
 <span class="s2">    * Color Map: </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cmap_name</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
 <span class="s2">        * Size (W,H) : (</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cmap_w</span><span class="p">)</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cmap_h</span><span class="p">)</span><span class="si">}</span><span class="s2">) @ (x=</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cmap_x</span><span class="p">)</span><span class="si">}</span><span class="s2">,y=</span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="n">cmap_y</span><span class="p">)</span><span class="si">}</span><span class="s2">)</span>
 <span class="s2">    * Key Operation</span>
+<span class="s2">        * </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; Set the window fullscreen.</span>
 <span class="s2">        * </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; Restart the instructor video.</span>
 <span class="s2">        * </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; Increase the speed of the instructor video.</span>
 <span class="s2">        * </span><span class="si">{</span><span class="n">toGREEN</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> -&gt; Slow donw the speed of the instructor video.</span>
@@ -396,7 +408,9 @@
         <span class="n">scores</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">calculate_angle</span><span class="p">(</span>
             <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span> <span class="n">angle_points</span><span class="o">=</span><span class="n">angle_points</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">angle_unit</span>
         <span class="p">)</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span>
+            <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span> <span class="n">connections</span><span class="o">=</span><span class="n">connections</span>
+        <span class="p">)</span>
 
         <span class="c1"># Instructors</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">VIDEO_SPEED</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>

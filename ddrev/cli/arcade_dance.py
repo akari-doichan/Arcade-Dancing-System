@@ -26,6 +26,7 @@ def arcade_dance(argv=sys.argv[1:]):
     Args:
         -J/--json (str)                         : A path to an instructor video json file.
         -C/--cam (int, optional)                : Your camera device number. Defaults to ``0``.
+        --connections (str)                     : Type of connection to draw. Please choose from ``["body", "pose"]``. Defaults to ``"body"``.
         --instructor-xywh (List[int], optional) : The size and location of instructor video. Defaults to ``None``.
         --axes (List[int])                      : Half of the size of the ellipse main axes. Defaults to ``[30, 30]``.
         --max-score (flaot, optional)           : If the score (angle difference with the instructor) is higher than this value, it will be rounded to this value. Defaults to ``90.``.
@@ -39,11 +40,12 @@ def arcade_dance(argv=sys.argv[1:]):
     NOTE:
         When you run from the command line, execute as follows::
 
-            $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\
-                        --max-score 90 \\
-                        --instructor-xywh "[-410,10,400,400]" \\
-                        --codec MP4V \\
-                        --record
+        $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\
+                       --connections body \\
+                       --max-score 90 \\
+                       --instructor-xywh "[-410,10,400,400]" \\
+                       --codec MP4V \\
+                       --record
     """
     parser = argparse.ArgumentParser(
         prog="dance",
@@ -63,6 +65,13 @@ def arcade_dance(argv=sys.argv[1:]):
         type=int,
         default=0,
         help="Your camera device number. Defaults to 0.",
+    )
+    parser.add_argument(
+        "--connections",
+        type=str,
+        choices=["body", "pose"],
+        default="body",
+        help="Type of connection to draw. Please choose from [body, pose]. Defaults to body.",
     )
     parser.add_argument(
         "--instructor-xywh",
@@ -157,6 +166,7 @@ def arcade_dance(argv=sys.argv[1:]):
     angle_points = data["angle_points"]
     angle_unit = data["angle_unit"]
     estimator = poses.get(identifier=model)
+    connections = args.connections
     axes = args.axes
 
     # Color Map Indicator
@@ -190,6 +200,7 @@ def arcade_dance(argv=sys.argv[1:]):
     msg = f"""[Arcade Dancing System]
     * Model: {toGREEN(model)}
     * Scoring Method: {toGREEN(score_method)}
+    * Connection Type: {toGREEN(connections)}
     * Web Camera
         * Camera ID : {toGREEN(cam)}
         * Size (W,H): ({toGREEN(width)},{toGREEN(height)})
@@ -202,6 +213,7 @@ def arcade_dance(argv=sys.argv[1:]):
     * Color Map: {toGREEN(cmap_name)}
         * Size (W,H) : ({toGREEN(cmap_w)},{toGREEN(cmap_h)}) @ (x={toGREEN(cmap_x)},y={toGREEN(cmap_y)})
     * Key Operation
+        * {toGREEN('f')} -> Set the window fullscreen.
         * {toGREEN('r')} -> Restart the instructor video.
         * {toGREEN('d')} -> Increase the speed of the instructor video.
         * {toGREEN('s')} -> Slow donw the speed of the instructor video.
@@ -238,7 +250,9 @@ def arcade_dance(argv=sys.argv[1:]):
         scores = estimator.calculate_angle(
             landmarks=landmarks, angle_points=angle_points, unit=angle_unit
         )
-        frame = estimator.draw_landmarks(frame=frame, landmarks=landmarks)
+        frame = estimator.draw_landmarks(
+            frame=frame, landmarks=landmarks, connections=connections
+        )
 
         # Instructors
         for _ in range(VIDEO_SPEED[0]):

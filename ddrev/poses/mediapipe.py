@@ -8,6 +8,7 @@ The landmark model in MediaPipe Pose predicts the location of 33 pose landmarks 
 
 .. image:: https://google.github.io/mediapipe/images/mobile/pose_tracking_full_body_landmarks.png
 """
+import copy
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import cv2
@@ -16,7 +17,7 @@ import numpy as np
 import numpy.typing as npt
 from mediapipe.framework.formats.landmark_pb2 import NormalizedLandmarkList
 
-from ..utils._exceptions import KeyError
+from ..utils._colorings import toGREEN
 from ..utils.feedback_utils import drawScoreArc, putScoreText
 from ..utils.score_utils import calculate_angle
 from .base import BasePoseEstimator
@@ -24,7 +25,13 @@ from .base import BasePoseEstimator
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
+POSE_CONNECTIONS = mp_pose.POSE_CONNECTIONS  #
+BODY_CONNECTIONS = frozenset(
+    [(f, t) for f, t in POSE_CONNECTIONS if f.value > 10 and t.value > 10]
+)  # Without Face.
+
 VISIBILITY_THRESHOLD = 0.5
+PRESENCE_THRESHOLD = 0.5
 
 
 class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
@@ -68,7 +75,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         min_tracking_confidence: float = 0.5,
         landmark_drawing_specs: Dict[str, Any] = {},
         connection_drawing_specs: Dict[str, Any] = {},
-        **kwargs
+        **kwargs,
     ):
         """Initialize an instance of ``mp.solutions.poses.Pose``.
 
@@ -157,14 +164,16 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         self,
         frame: npt.NDArray[np.uint8],
         key: int = -1,
+        connections: str = "body",
         inplace: bool = True,
-        **kwargs
+        **kwargs,
     ) -> npt.NDArray[np.uint8]:
         """Process frame in while-loop in :meth:`realtime_process <ddrev.realtime.VideoCapture.realtime_process>`.
 
         Args:
             frame (npt.NDArray[np.uint8]) : A three channel ``BGR`` image represented as numpy ndarray.
             key (int, optional)           : An integer representing the Unicode character. Defaults to ``1``.
+            connections (str, optional)   : Type of connection to draw. Please choose from ``["body", "pose"]``. Defaults to ``"body"``.
             inplace (bool, optional)      : Whether frame is edited (drawn ``landmarks``) in place. Defaults to ``True``.
 
         Returns:
@@ -188,13 +197,16 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             >>> fig.show()
         """
         landmarks = self.process(frame)
-        frame = self.draw_landmarks(frame, landmarks=landmarks, inplace=inplace)
+        frame = self.draw_landmarks(
+            frame, landmarks=landmarks, connections=connections, inplace=inplace
+        )
         return frame
 
     def draw_landmarks(
         self,
         frame: npt.NDArray[np.uint8],
         landmarks: NormalizedLandmarkList,
+        connections: str = "body",
         inplace: bool = True,
     ) -> npt.NDArray[np.uint8]:
         """Draws the landmarks and the connections on the image.
@@ -202,6 +214,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         Args:
             frame (npt.NDArray[np.uint8])      : A three channel ``RGB`` image represented as numpy ndarray.
             landmarks (NormalizedLandmarkList) : A normalized landmark list proto message to be annotated on the image.
+            connections (str, optional)        : Type of connection to draw. Please choose from ``["body", "pose"]``. Defaults to ``"body"``.
             inplace (bool, optional)           : Whether frame is edited (drawn ``landmarks``) in place. Defaults to ``True``.
 
         Returns:
@@ -226,13 +239,68 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         """
         if not inplace:
             frame = frame.copy()
-        mp_drawing.draw_landmarks(
-            image=frame,
-            landmark_list=landmarks,
-            connections=mp_pose.POSE_CONNECTIONS,
-            landmark_drawing_spec=self.landmark_drawing_spec,
-            connection_drawing_spec=self.connection_drawing_spec,
-        )
+
+        connections = connections.lower()
+        if connections == "pose":
+            connection_set = POSE_CONNECTIONS
+            landmark_lb, landmark_ub = (0, 34)  # len(POSE_CONNECTIONS)=35
+        else:
+            connection_set = BODY_CONNECTIONS
+            landmark_lb, landmark_ub = (11, 34)
+
+        # mp_drawing.draw_landmarks
+        if landmarks:
+            frame_rows, frame_cols, _ = frame.shape
+            idx_to_coordinates = {}
+            for idx, landmark in enumerate(landmarks.landmark):
+                if landmark_lb <= idx <= landmark_ub:
+                    if (
+                        landmark.HasField("visibility")
+                        and landmark.visibility < VISIBILITY_THRESHOLD
+                    ) or (
+                        landmark.HasField("presence")
+                        and landmark.presence < PRESENCE_THRESHOLD
+                    ):
+                        continue
+                    landmark_px = mp_drawing._normalized_to_pixel_coordinates(
+                        normalized_x=landmark.x,
+                        normalized_y=landmark.y,
+                        image_width=frame_cols,
+                        image_height=frame_rows,
+                    )
+                    if landmark_px:
+                        idx_to_coordinates[idx] = landmark_px
+            if connection_set:
+                num_landmarks = len(landmarks.landmark)
+                # Draws the connection if the start and end landmarks are both visible.
+                for connection in connection_set:
+                    start_idx, end_idx = connection
+                    # if not (
+                    #     0 <= start_idx < num_landmarks and 0 <= end_idx < num_landmarks
+                    # ):
+                    #     raise ValueError(
+                    #         f"Landmark index is out of range. Invalid connection from landmark #{toGREEN(start_idx)} to landmark #{toGREEN(end_idx)}."
+                    #     )
+                    if (
+                        start_idx in idx_to_coordinates
+                        and end_idx in idx_to_coordinates
+                    ):
+                        cv2.line(
+                            img=frame,
+                            pt1=idx_to_coordinates[start_idx],
+                            pt2=idx_to_coordinates[end_idx],
+                            color=self.connection_drawing_spec.color,
+                            thickness=self.connection_drawing_spec.thickness,
+                        )
+            # Draws landmark points after finishing the connection lines, which is aesthetically better.
+            for landmark_px in idx_to_coordinates.values():
+                cv2.circle(
+                    img=frame,
+                    center=landmark_px,
+                    radius=self.landmark_drawing_spec.circle_radius,
+                    color=self.landmark_drawing_spec.color,
+                    thickness=self.landmark_drawing_spec.thickness,
+                )
         return frame
 
     @staticmethod
@@ -344,7 +412,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             npt.NDArray[np.uint8],
         ] = drawScoreArc,
         inplace: bool = True,
-        **kwargs
+        **kwargs,
     ) -> npt.NDArray[np.uint8]:
         """Draw ``score`` in ``frame`` using ``draw_func``
 

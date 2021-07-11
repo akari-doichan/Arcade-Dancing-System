@@ -8,13 +8,13 @@
   
   <meta property="og:title" content="ddrev.cli.arcade_dance module" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://iwasakishuto.github.io/Python-Charmers/ddrev.cli.arcade_dance.html" />
-  <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png" />
+  <meta property="og:url" content="https://akari-doichan.github.io/Arcade-Dancing-System/ddrev.cli.arcade_dance.html" />
+  <meta property="og:image" content="https://akari-doichan.github.io/Arcade-Dancing-System/_images/header.png" />
   <meta property="og:image:alt" content="ddrev.cli.arcade_dance module" />
-  <meta property="og:site_name" content="Python-Charmers" />
-<meta name="twitter:site" content="@cabernet_rock" />
+  <meta property="og:site_name" content="Arcade-Dancing-System" />
+<meta name="twitter:site" content="@akari_doichan" />
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image:src" content="https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png">
+<meta name="twitter:image:src" content="https://akari-doichan.github.io/Arcade-Dancing-System/_images/header.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>ddrev.cli.arcade_dance module &mdash; Arcade Dance System  documentation</title>
@@ -195,6 +195,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>-J/--json</strong> (<em>str</em>) – A path to an instructor video json file.</p></li>
 <li><p><strong>-C/--cam</strong> (<em>int</em><em>, </em><em>optional</em>) – Your camera device number. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><strong>--connections</strong> (<em>str</em>) – Type of connection to draw. Please choose from <code class="docutils literal notranslate"><span class="pre">[&quot;body&quot;,</span> <span class="pre">&quot;pose&quot;]</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;body&quot;</span></code>.</p></li>
 <li><p><strong>--instructor-xywh</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The size and location of instructor video. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>--axes</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – Half of the size of the ellipse main axes. Defaults to <code class="docutils literal notranslate"><span class="pre">[30,</span> <span class="pre">30]</span></code>.</p></li>
 <li><p><strong>--max-score</strong> (<em>flaot</em><em>, </em><em>optional</em>) – If the score (angle difference with the instructor) is higher than this value, it will be rounded to this value. Defaults to <code class="docutils literal notranslate"><span class="pre">90.</span></code>.</p></li>
@@ -211,12 +212,11 @@
 <p class="admonition-title">Note</p>
 <p>When you run from the command line, execute as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ arcade-dance -J data/sample-instructor_mediapipe_angle.json \
-            --max-score 90 \
-            --instructor-xywh &quot;[-410,10,400,400]&quot; \
-            --codec MP4V \
-            --record
 </pre></div>
 </div>
+<blockquote>
+<div><p>–connections body –max-score 90 –instructor-xywh “[-410,10,400,400]” –codec MP4V –record</p>
+</div></blockquote>
 </div>
 </dd></dl>
 

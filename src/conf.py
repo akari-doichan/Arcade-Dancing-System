@@ -79,13 +79,13 @@ autodoc_member_order = "bysource"
 todo_include_todos = True
 
 # [opengraph]
-ogp_site_url = "https://iwasakishuto.github.io/Python-Charmers/"
-ogp_image = "https://iwasakishuto.github.io/images/FacebookImage/Python-Charmers.png"
+ogp_site_url = "https://akari-doichan.github.io/Arcade-Dancing-System/"
+ogp_image = "https://akari-doichan.github.io/Arcade-Dancing-System/_images/header.png"
 ogp_description_length = 200
 ogp_type = "article"
 ogp_custom_meta_tags = [
-    '<meta property="og:site_name" content="Python-Charmers" />',
-    '<meta name="twitter:site" content="@cabernet_rock" />',
+    '<meta property="og:site_name" content="Arcade-Dancing-System" />',
+    '<meta name="twitter:site" content="@akari_doichan" />',
     '<meta name="twitter:card" content="summary">',
     f'<meta name="twitter:image:src" content="{ogp_image}">',
 ]
