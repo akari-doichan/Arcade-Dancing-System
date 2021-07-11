@@ -9,7 +9,7 @@ function whereIam() {
   echo -e "@ \033[07m`pwd`\033[0m"
 }
 
-MODULE_DIRNAME="ddrev"s
+MODULE_DIRNAME="ddrev"
 HERE=$(cd $(dirname $0);pwd)
 
 logging "cd $HERE"

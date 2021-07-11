@@ -137,10 +137,11 @@ class VideoCapture(cv2.VideoCapture):
                     cv2.setWindowProperty(
                         winname=winname,
                         prop_id=cv2.WND_PROP_FULLSCREEN,
-                        prop_value=1-cv2.getWindowProperty(
+                        prop_value=1
+                        - cv2.getWindowProperty(
                             winname=winname,
                             prop_id=cv2.WND_PROP_FULLSCREEN,
-                        )
+                        ),
                     )
         self.release()
         if self.out is not None:
