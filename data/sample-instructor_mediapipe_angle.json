@@ -1,6 +1,6 @@
 {
   "model": "mediapipe",
-  "video": "/Users/iwasakishuto/Github/Arcade-Dancing-System/data/sample-instructor.mp4",
+  "video": "data/sample-instructor.mp4",
   "width": 600,
   "height": 600,
   "frame_count": 1437,

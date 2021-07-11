@@ -16,11 +16,12 @@ def video2landmarks(argv=sys.argv[1:]):
     """Convert from video to landmarks data (``.json``)
 
     Args:
-        -V/--video (str)               : A path to an input Video file.
-        -O/--out (str, optional)       : A path to an output json file. Defaults to ``None``.
-        --model (str, optional)        : The Name of Pose-Estimation Model. Defaults to ``"mediapipe"``.
-        --score-method (str, optional) : How to calculate scores. Defaults to ``"angle"``.
-        --angle-unit (str, optional)   : Unit of Angle. Defaults to ``"radian"``.
+        -V/--video (str)                 : A path to an input Video file.
+        -O/--out (str, optional)         : A path to an output json file. Defaults to ``None``.
+        --model (str, optional)          : The Name of Pose-Estimation Model. Defaults to ``"mediapipe"``.
+        --score-method (str, optional)   : How to calculate scores. Defaults to ``"angle"``.
+        --angle-unit (str, optional)     : Unit of Angle. Defaults to ``"radian"``.
+        --store-abspath (bool, optional) : Whether to keep the absolute path or relative path of the video file. Defaults to relative path.
 
     NOTE:
         When you run from the command line, execute as follows::
@@ -58,9 +59,16 @@ def video2landmarks(argv=sys.argv[1:]):
         default="degree",
         help="Unit of Angle.",
     )
+    parser.add_argument(
+        "--store-abspath",
+        actions="store_true",
+        help="Whether to keep the absolute path or relative path of the video file. Defaults to relative path.",
+    )
     args = parser.parse_args(argv)
 
-    video_path = os.path.abspath(args.video)
+    video_path = args.video
+    if args.store_abspath:
+        video_path = os.path.abspath(video_path)
     out_path = args.out
     model = args.model
     score_method = args.score_method

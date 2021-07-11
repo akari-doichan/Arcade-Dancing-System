@@ -174,11 +174,12 @@
     <span class="sd">&quot;&quot;&quot;Convert from video to landmarks data (``.json``)</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        -V/--video (str)               : A path to an input Video file.</span>
-<span class="sd">        -O/--out (str, optional)       : A path to an output json file. Defaults to ``None``.</span>
-<span class="sd">        --model (str, optional)        : The Name of Pose-Estimation Model. Defaults to ``&quot;mediapipe&quot;``.</span>
-<span class="sd">        --score-method (str, optional) : How to calculate scores. Defaults to ``&quot;angle&quot;``.</span>
-<span class="sd">        --angle-unit (str, optional)   : Unit of Angle. Defaults to ``&quot;radian&quot;``.</span>
+<span class="sd">        -V/--video (str)                 : A path to an input Video file.</span>
+<span class="sd">        -O/--out (str, optional)         : A path to an output json file. Defaults to ``None``.</span>
+<span class="sd">        --model (str, optional)          : The Name of Pose-Estimation Model. Defaults to ``&quot;mediapipe&quot;``.</span>
+<span class="sd">        --score-method (str, optional)   : How to calculate scores. Defaults to ``&quot;angle&quot;``.</span>
+<span class="sd">        --angle-unit (str, optional)     : Unit of Angle. Defaults to ``&quot;radian&quot;``.</span>
+<span class="sd">        --store-abspath (bool, optional) : Whether to keep the absolute path or relative path of the video file. Defaults to relative path.</span>
 
 <span class="sd">    NOTE:</span>
 <span class="sd">        When you run from the command line, execute as follows::</span>
@@ -216,9 +217,16 @@
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;degree&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Unit of Angle.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--store-abspath&quot;</span><span class="p">,</span>
+        <span class="n">actions</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to keep the absolute path or relative path of the video file. Defaults to relative path.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
 
-    <span class="n">video_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">video</span><span class="p">)</span>
+    <span class="n">video_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">video</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">store_abspath</span><span class="p">:</span>
+        <span class="n">video_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">video_path</span><span class="p">)</span>
     <span class="n">out_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">out</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">model</span>
     <span class="n">score_method</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">score_method</span>
