@@ -40,12 +40,12 @@ def arcade_dance(argv=sys.argv[1:]):
     NOTE:
         When you run from the command line, execute as follows::
 
-        $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\
-                       --connections body \\
-                       --max-score 90 \\
-                       --instructor-xywh "[-410,10,400,400]" \\
-                       --codec MP4V \\
-                       --record
+            $ arcade-dance -J data/sample-instructor_mediapipe_angle.json \\
+                           --connections body \\
+                           --max-score 90 \\
+                           --instructor-xywh "[-410,10,400,400]" \\
+                           --codec MP4V \\
+                           --record
     """
     parser = argparse.ArgumentParser(
         prog="dance",

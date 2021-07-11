@@ -212,11 +212,13 @@
 <p class="admonition-title">Note</p>
 <p>When you run from the command line, execute as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ arcade-dance -J data/sample-instructor_mediapipe_angle.json \
+               --connections body \
+               --max-score 90 \
+               --instructor-xywh &quot;[-410,10,400,400]&quot; \
+               --codec MP4V \
+               --record
 </pre></div>
 </div>
-<blockquote>
-<div><p>–connections body –max-score 90 –instructor-xywh “[-410,10,400,400]” –codec MP4V –record</p>
-</div></blockquote>
 </div>
 </dd></dl>
 

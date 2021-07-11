@@ -9,7 +9,7 @@
   <meta property="og:title" content="ddrev.cli package" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://akari-doichan.github.io/Arcade-Dancing-System/ddrev.cli.html" />
-  <meta property="og:description" content="Submodules: ddrev.cli.arcade_dance module, ddrev.cli.video2landmarks module. Module contents:" />
+  <meta property="og:description" content="Submodules: ddrev.cli.arcade_dance module, ddrev.cli.video2landmarks module. Module contents: Command Line Scripts: Run the program from a command line. 1. Conversion from Video to Landmarks: You c..." />
   <meta property="og:image" content="https://akari-doichan.github.io/Arcade-Dancing-System/_images/header.png" />
   <meta property="og:image:alt" content="ddrev.cli package" />
   <meta property="og:site_name" content="Arcade-Dancing-System" />
@@ -196,6 +196,31 @@
 </div>
 <div class="section" id="module-ddrev.cli">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ddrev.cli" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="command-line-scripts">
+<h3>Command Line Scripts<a class="headerlink" href="#command-line-scripts" title="Permalink to this headline">¶</a></h3>
+<p>Run the program from a command line.</p>
+<div class="section" id="conversion-from-video-to-landmarks">
+<h4>1. Conversion from Video to Landmarks<a class="headerlink" href="#conversion-from-video-to-landmarks" title="Permalink to this headline">¶</a></h4>
+<p>You can convert from <cite>data/sample-instructor.mp4</cite> to <cite>data/sample-instructor_mediapipe_angle.json</cite> by the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ poetry run video2landmarks -V data/sample-instructor.mp4 <span class="se">\</span>
+                            --model mediapipe <span class="se">\</span>
+                            --score-method angle         -
+</pre></div>
+</div>
+</div>
+<div class="section" id="realtime-dance-with-instructor-s-video">
+<h4>2. Realtime dance with instructor’s video<a class="headerlink" href="#realtime-dance-with-instructor-s-video" title="Permalink to this headline">¶</a></h4>
+<p>You can dance while scoring in real time using the data (<cite>data/sample-instructor_mediapipe_angle.json</cite>) created above.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ poetry run arcade-dance -J data/sample-instructor_mediapipe_angle.json <span class="se">\</span>
+                          --connections body <span class="se">\</span>
+                          --max-score <span class="m">90</span> <span class="se">\</span>
+                          --instructor-xywh <span class="s2">&quot;[-410,10,400,400]&quot;</span> <span class="se">\</span>
+                          --codec MP4V <span class="se">\</span>
+                          --record
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 

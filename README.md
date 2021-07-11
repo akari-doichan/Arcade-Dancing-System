@@ -44,8 +44,11 @@ $ poetry run video2landmarks -V data/sample-instructor.mp4 \
 
 #### Realtime dance with instructor's video
 
+You can dance while scoring in real time using the data (`data/sample-instructor_mediapipe_angle.json`) created above.
+
 ```sh
 $ poetry run arcade-dance -J data/sample-instructor_mediapipe_angle.json \
+                          --connections body \
                           --max-score 90 \
                           --instructor-xywh "[-410,10,400,400]" \
                           --codec MP4V \
