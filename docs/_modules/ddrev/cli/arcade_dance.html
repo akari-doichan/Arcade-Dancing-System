@@ -395,6 +395,9 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            npt.NDArray[np.uint8]: An edited (drawn ``landmarks`` and score) frame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Flip the frame to make it easier to imitate the movement of the instructor.</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">flipCode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
             <span class="n">video</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">):</span>
@@ -417,6 +420,7 @@
             <span class="n">curt_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">curt_idx</span> <span class="o">&gt;=</span> <span class="n">instructor_frame_count</span><span class="p">:</span>
                 <span class="n">video</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_FRAMES</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">curt_idx</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame_</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">frame</span>
@@ -433,7 +437,6 @@
             <span class="n">max_score</span><span class="o">=</span><span class="n">max_score</span><span class="p">,</span>
             <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
         <span class="p">)</span>
-
         <span class="c1"># Draw Instructor&#39;s video</span>
         <span class="n">frame_</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame_</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks_</span><span class="p">)</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span>

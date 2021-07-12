@@ -237,6 +237,9 @@ def arcade_dance(argv=sys.argv[1:]):
         Returns:
             npt.NDArray[np.uint8]: An edited (drawn ``landmarks`` and score) frame.
         """
+        # Flip the frame to make it easier to imitate the movement of the instructor.
+        frame = cv2.flip(src=frame, flipCode=1)
+
         if key == ord("r"):
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
         elif key == ord("d"):
@@ -259,6 +262,7 @@ def arcade_dance(argv=sys.argv[1:]):
             curt_idx = int(video.get(cv2.CAP_PROP_POS_FRAMES))
             if curt_idx >= instructor_frame_count:
                 video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                curt_idx = 0
             is_ok, frame_ = video.read()
             if (not is_ok) or (frame_ is None):
                 return frame
@@ -275,7 +279,6 @@ def arcade_dance(argv=sys.argv[1:]):
             max_score=max_score,
             axes=axes,
         )
-
         # Draw Instructor's video
         frame_ = estimator.draw_landmarks(frame=frame_, landmarks=landmarks_)
         cv2.putText(

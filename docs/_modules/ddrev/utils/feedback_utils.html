@@ -240,7 +240,7 @@
 <div class="viewcode-block" id="drawScoreArc"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.drawScoreArc">[docs]</a><span class="k">def</span> <span class="nf">drawScoreArc</span><span class="p">(</span>
     <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
     <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
     <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">axes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
     <span class="n">lineType</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_8</span><span class="p">,</span>
@@ -251,12 +251,12 @@
     <span class="sd">&quot;&quot;&quot;Draw an arc with fill color according to the ``score``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        frame (npt.NDArray[np.uint8])        : Input image.</span>
-<span class="sd">        score (float)                        : Score value to describe.</span>
-<span class="sd">        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.</span>
-<span class="sd">        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.</span>
-<span class="sd">        axes (Tuple[int, int], optional)     : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.</span>
-<span class="sd">        lineType (int, optional)             : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])                 : Input image.</span>
+<span class="sd">        score (float)                                 : Score value to describe.</span>
+<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.</span>
+<span class="sd">        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.</span>
+<span class="sd">        axes (Tuple[int, int], optional)              : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.</span>
+<span class="sd">        lineType (int, optional)                      : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        npt.NDArray[np.uint8]: An edited image.</span>
@@ -317,7 +317,7 @@
 <div class="viewcode-block" id="putScoreText"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.putScoreText">[docs]</a><span class="k">def</span> <span class="nf">putScoreText</span><span class="p">(</span>
     <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
     <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">coords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
     <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">fontFace</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_PLAIN</span><span class="p">,</span>
     <span class="n">fontScale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -327,13 +327,13 @@
     <span class="sd">&quot;&quot;&quot;Write the ``score`` at the midpoint of both ends of the coordinates (``coords``).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        frame (npt.NDArray[np.uint8])        : Input image.</span>
-<span class="sd">        score (float)                        : Score value to describe.</span>
-<span class="sd">        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.</span>
-<span class="sd">        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.</span>
-<span class="sd">        fontFace (int, optional)             : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.</span>
-<span class="sd">        fontScale (int, optional)            : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.</span>
-<span class="sd">        color (Tuple[int,int,int], optional) : Text color. Defaults to ``(0,255,255)``.</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])                 : Input image.</span>
+<span class="sd">        score (float)                                 : Score value to describe.</span>
+<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.</span>
+<span class="sd">        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.</span>
+<span class="sd">        fontFace (int, optional)                      : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.</span>
+<span class="sd">        fontScale (int, optional)                     : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.</span>
+<span class="sd">        color (Tuple[int,int,int], optional)          : Text color. Defaults to ``(0,255,255)``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        npt.NDArray[np.uint8]: An edited image.</span>

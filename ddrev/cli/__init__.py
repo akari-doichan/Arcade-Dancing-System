@@ -16,7 +16,7 @@ You can convert from `data/sample-instructor.mp4` to `data/sample-instructor_med
 
     $ poetry run video2landmarks -V data/sample-instructor.mp4 \\
                                 --model mediapipe \\
-                                --score-method angle         -
+                                --score-method angle
 
 *****************************************
 2. Realtime dance with instructor's video

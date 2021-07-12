@@ -51,7 +51,10 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         connection_drawing_spec (mp_drawing.DrawingSpec) : Drawing spec for connections.
     """
 
-    ANGLE_POINTS: List[List[int]] = [
+    # Consider the counterclockwise angle
+    # from the line segment connecting the 1st and 2nd points
+    # to the line segment connecting the 2nd and 3rd points.
+    ANGLE_3POINTS: List[List[int]] = [
         [18, 16, 14],
         [12, 14, 16],
         [14, 12, 24],
@@ -64,6 +67,25 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         [25, 23, 11],
         [23, 25, 27],
         [31, 27, 25],
+    ]
+
+    ANGLE_2POINTS: List[List[int]] = [
+        [15, 17],
+        [13, 15],
+        [11, 13],
+        [23, 11],
+        [25, 23],
+        [27, 25],
+        [31, 27],
+        [12, 11],
+        [24, 23],
+        [18, 16],
+        [16, 14],
+        [14, 12],
+        [24, 12],
+        [26, 24],
+        [28, 26],
+        [32, 28],
     ]
 
     def __init__(
@@ -361,14 +383,14 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
     @staticmethod
     def calculate_angle(
         landmarks: NormalizedLandmarkList,
-        angle_points: List[List[int]] = ANGLE_POINTS,
+        angle_points: List[List[int]] = ANGLE_3POINTS,
         unit: bool = "radian",
     ) -> npt.NDArray[float]:
         """Calculate angles of each ``angle_points``.
 
         Args:
             landmarks (NormalizedLandmarkList)                 : Landmarks.
-            angle_points (Optional[List[List[int]]], optional) : A list of 3 points used to determine the angle. Defaults to ``ANGLE_POINTS``.
+            angle_points (Optional[List[List[int]]], optional) : A list of 3 points used to determine the angle. Defaults to ``ANGLE_3POINTS``.
             unit (str, optional)                               : Unit of Angle. Defaults to ``"radian"``.
 
         Returns:
@@ -385,7 +407,9 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             >>> len(angles)
             12
         """
-        angles = [-1] * len(angle_points)
+        angle_points = np.asarray(angle_points, dtype=np.uint8)
+        num_angles, num_points = angle_points.shape
+        angles = [-1] * num_angles
         if (landmarks is None) or (not hasattr(landmarks, "landmark")):
             return angles
         landmark = landmarks.landmark
@@ -397,8 +421,13 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
                     break
                 # coords.append(np.asarray([p.x, p.y, p.z]))
                 coords.append(np.asarray([p.x, p.y]))
-            if len(coords) == 3:
-                angles[i] = calculate_angle(*coords, unit=unit)
+            if len(coords) == num_points:
+                if num_points == 2:
+                    angles[i] = calculate_angle(
+                        *coords, np.asarray([p.x + 10, p.y]), unit=unit
+                    )
+                else:
+                    angles[i] = calculate_angle(*coords, unit=unit)
         return np.asarray(angles)
 
     @staticmethod
@@ -406,7 +435,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         frame: npt.NDArray[np.uint8],
         scores: List[float],
         landmarks: NormalizedLandmarkList,
-        angle_points: List[List[int]] = ANGLE_POINTS,
+        angle_points: List[List[int]] = ANGLE_3POINTS,
         draw_func: Callable[
             [npt.NDArray[np.uint8], List[List[float]], float, bool],
             npt.NDArray[np.uint8],
@@ -420,7 +449,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
             frame (npt.NDArray[np.uint8])                                                                           : Input image.
             scores (List[float])                                                                                    : Scores to display.
             landmarks (NormalizedLandmarkList)                                                                      : Landmarks.
-            angle_points (List[List[int]])                                                                          : A list of 3 points used to determine the angle. Defaults to ``ANGLE_POINTS``.
+            angle_points (List[List[int]])                                                                          : A list of 3 points used to determine the angle. Defaults to ``ANGLE_3POINTS``.
             draw_func (Callable[ [npt.NDArray[np.uint8], List[List[float]], float, bool], npt.NDArray[np.uint8], ]) : How to draw the ``score``. Defaults to :meth:`drawScoreArc <ddrev.utils.feedback_utils.drawScoreArc>`.
             inplace (bool, optional)                                                                                : Whether frame is edited (drawn ``score``) in place. Defaults to ``:meth:drawScoreArc``.
 
@@ -454,6 +483,8 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
         if (landmarks is None) or (not hasattr(landmarks, "landmark")):
             return frame
         landmark = landmarks.landmark
+        angle_points = np.asarray(angle_points, dtype=np.uint8)
+        num_points = angle_points.shape[1]
         for i, (points, score) in enumerate(zip(angle_points, scores)):
             coords = []
             for point in points:
@@ -462,7 +493,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
                     break
                 # coords.append(np.asarray([p.x, p.y, p.z]))
                 coords.append(np.asarray([p.x, p.y]))
-            if len(coords) == 3:
+            if len(coords) == num_points:
                 frame = draw_func(
                     frame=frame, score=score, coords=coords, inplace=inplace, **kwargs
                 )

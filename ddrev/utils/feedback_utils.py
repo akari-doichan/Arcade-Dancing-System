@@ -82,7 +82,7 @@ def cmap_indicator_create(
 def drawScoreArc(
     frame: npt.NDArray[np.uint8],
     score: float,
-    coords: List[List[int]],
+    coords: Tuple[List[int], List[int], List[int]],
     inplace: bool = True,
     axes: Tuple[int, int] = (10, 10),
     lineType: int = cv2.LINE_8,
@@ -93,12 +93,12 @@ def drawScoreArc(
     """Draw an arc with fill color according to the ``score``.
 
     Args:
-        frame (npt.NDArray[np.uint8])        : Input image.
-        score (float)                        : Score value to describe.
-        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.
-        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.
-        axes (Tuple[int, int], optional)     : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.
-        lineType (int, optional)             : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
+        frame (npt.NDArray[np.uint8])                 : Input image.
+        score (float)                                 : Score value to describe.
+        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.
+        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.
+        axes (Tuple[int, int], optional)              : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.
+        lineType (int, optional)                      : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
 
     Returns:
         npt.NDArray[np.uint8]: An edited image.
@@ -159,7 +159,7 @@ def drawScoreArc(
 def putScoreText(
     frame: npt.NDArray[np.uint8],
     score: float,
-    coords: List[List[int]],
+    coords: Tuple[List[int], List[int], List[int]],
     inplace: bool = True,
     fontFace: int = cv2.FONT_HERSHEY_PLAIN,
     fontScale: int = 1,
@@ -169,13 +169,13 @@ def putScoreText(
     """Write the ``score`` at the midpoint of both ends of the coordinates (``coords``).
 
     Args:
-        frame (npt.NDArray[np.uint8])        : Input image.
-        score (float)                        : Score value to describe.
-        coords (List[List[int]])             : Coordinates of the three points used to calculate the angle.
-        inplace (bool, optional)             : Whether frame is edited in place. Defaults to ``True``.
-        fontFace (int, optional)             : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.
-        fontScale (int, optional)            : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.
-        color (Tuple[int,int,int], optional) : Text color. Defaults to ``(0,255,255)``.
+        frame (npt.NDArray[np.uint8])                 : Input image.
+        score (float)                                 : Score value to describe.
+        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.
+        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.
+        fontFace (int, optional)                      : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.
+        fontScale (int, optional)                     : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.
+        color (Tuple[int,int,int], optional)          : Text color. Defaults to ``(0,255,255)``.
 
     Returns:
         npt.NDArray[np.uint8]: An edited image.
