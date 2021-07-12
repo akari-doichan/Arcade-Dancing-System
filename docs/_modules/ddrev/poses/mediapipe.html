@@ -607,7 +607,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            frame (npt.NDArray[np.uint8])                                                                           : Input image.</span>
-<span class="sd">            scores (List[float])                                                                                    : Scores to display.</span>
+<span class="sd">            scores (List[float])                                                                                    : Scores to display. (If angles, ``instructor&#39;s angles`` -``target&#39;s angles``)</span>
 <span class="sd">            landmarks (NormalizedLandmarkList)                                                                      : Landmarks.</span>
 <span class="sd">            angle_points (List[List[int]])                                                                          : A list of 3 points used to determine the angle. Defaults to ``ANGLE_3POINTS``.</span>
 <span class="sd">            draw_func (Callable[ [npt.NDArray[np.uint8], List[List[float]], float, bool], npt.NDArray[np.uint8], ]) : How to draw the ``score``. Defaults to :meth:`drawScoreArc &lt;ddrev.utils.feedback_utils.drawScoreArc&gt;`.</span>

@@ -253,7 +253,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        frame (npt.NDArray[np.uint8])                 : Input image.</span>
 <span class="sd">        score (float)                                 : Score value to describe.</span>
-<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.</span>
+<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the ``3`` points used to calculate the angle.</span>
 <span class="sd">        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.</span>
 <span class="sd">        axes (Tuple[int, int], optional)              : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.</span>
 <span class="sd">        lineType (int, optional)                      : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.</span>
@@ -298,6 +298,7 @@
     <span class="n">cx_slide</span> <span class="o">=</span> <span class="p">(</span><span class="n">cx</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cy</span><span class="p">)</span>  <span class="c1"># Slide the center point in the x-axis direction</span>
     <span class="n">startAngle</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">-</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="n">cx_slide</span><span class="p">,</span> <span class="o">*</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
     <span class="n">angle</span> <span class="o">=</span> <span class="n">calculate_angle</span><span class="p">(</span><span class="o">*</span><span class="n">coords</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">score</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">max_score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">score</span> <span class="o">/=</span> <span class="n">max_score</span>
     <span class="n">cv2</span><span class="o">.</span><span class="n">ellipse</span><span class="p">(</span>
@@ -310,6 +311,86 @@
         <span class="n">color</span><span class="o">=</span><span class="n">score2color</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span>
         <span class="n">thickness</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">lineType</span><span class="o">=</span><span class="n">lineType</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="drawAuxiliaryAngle"><a class="viewcode-back" href="../../../ddrev.utils.feedback_utils.html#ddrev.utils.feedback_utils.drawAuxiliaryAngle">[docs]</a><span class="k">def</span> <span class="nf">drawAuxiliaryAngle</span><span class="p">(</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">thickness</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">lineType</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_8</span><span class="p">,</span>
+    <span class="n">shift</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">tipLength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Colormap</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coolwarm_r&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Draw an auxiliary arrow.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame (npt.NDArray[np.uint8])         : Input image.</span>
+<span class="sd">        score (float)                         : ``instructor&#39;s angles`` -``target&#39;s angles``.</span>
+<span class="sd">        coords (Tuple[List[int], List[int]])  : Coordinates of the ``2`` points used to calculate the angle.</span>
+<span class="sd">        inplace (bool, optional)              : Whether frame is edited in place. Defaults to ``True``.</span>
+<span class="sd">        thickness (int, optional)             : Line thickness. Defaults to ``1``.</span>
+<span class="sd">        lineType (int, optional)              : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.</span>
+<span class="sd">        shift (int, optional)                 : Number of fractional bits in the point coordinates. Defaults to ``0``.</span>
+<span class="sd">        tipLength (float, optional)           : The length of the arrow tip in relation to the arrow length. Defaults to ``0.1``.</span>
+<span class="sd">        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``&quot;coolwarm_r&quot;``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        npt.NDArray[np.uint8]: An edited image.</span>
+
+<span class="sd">    .. plot::</span>
+<span class="sd">        :class: popup-img</span>
+
+<span class="sd">        &gt;&gt;&gt; import cv2</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; from ddrev.utils import drawAuxiliaryAngle</span>
+<span class="sd">        &gt;&gt;&gt; fig, ax = plt.subplots()</span>
+<span class="sd">        &gt;&gt;&gt; A = np.asarray([0.2, 0.9])</span>
+<span class="sd">        &gt;&gt;&gt; B = np.asarray([0.8, 0.6])</span>
+<span class="sd">        &gt;&gt;&gt; C = np.asarray([0.3, 0.5])</span>
+<span class="sd">        &gt;&gt;&gt; frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)</span>
+<span class="sd">        &gt;&gt;&gt; H, W = frame.shape[:2]</span>
+<span class="sd">        &gt;&gt;&gt; drawAuxiliaryAngle(frame,  0.3, coords=(B,C))</span>
+<span class="sd">        &gt;&gt;&gt; drawAuxiliaryAngle(frame, -0.9, coords=(A,C))</span>
+<span class="sd">        &gt;&gt;&gt; pX, pY = (None, None)</span>
+<span class="sd">        &gt;&gt;&gt; for name, (x, y) in zip(list(&quot;ABCA&quot;), [A,B,C,A]):</span>
+<span class="sd">        ...     X, Y = (int(x * W), int(y * H))</span>
+<span class="sd">        ...     ax.scatter(X, Y, color=&quot;red&quot;)</span>
+<span class="sd">        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color=&quot;red&quot;)</span>
+<span class="sd">        ...     if pX is not None:</span>
+<span class="sd">        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))</span>
+<span class="sd">        ...     pX, pY = (X, Y)</span>
+<span class="sd">        &gt;&gt;&gt; ax.imshow(frame)</span>
+<span class="sd">        &gt;&gt;&gt; ax.axis(&quot;off&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ax.set_title(&quot;drawAuxiliaryAngle&quot;, fontsize=18)</span>
+<span class="sd">        &gt;&gt;&gt; fig.show()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">vx</span> <span class="o">=</span> <span class="n">ax</span> <span class="o">-</span> <span class="n">cx</span>
+    <span class="n">vy</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">-</span> <span class="n">cy</span>
+    <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">vy</span> <span class="o">=</span> <span class="o">-</span><span class="n">vy</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">vx</span> <span class="o">=</span> <span class="o">-</span><span class="n">vx</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">arrowedLine</span><span class="p">(</span>
+        <span class="n">img</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+        <span class="n">pt1</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cx</span> <span class="o">*</span> <span class="n">W</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">H</span><span class="p">)),</span>
+        <span class="n">pt2</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">cx</span> <span class="o">+</span> <span class="n">vy</span><span class="p">)</span> <span class="o">*</span> <span class="n">W</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">cy</span> <span class="o">+</span> <span class="n">vx</span><span class="p">)</span> <span class="o">*</span> <span class="n">H</span><span class="p">)),</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">score2color</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">score</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span>
+        <span class="n">thickness</span><span class="o">=</span><span class="n">thickness</span><span class="p">,</span>
+        <span class="n">line_type</span><span class="o">=</span><span class="n">lineType</span><span class="p">,</span>
+        <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span>
+        <span class="n">tipLength</span><span class="o">=</span><span class="n">tipLength</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">frame</span></div>
 
@@ -329,7 +410,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        frame (npt.NDArray[np.uint8])                 : Input image.</span>
 <span class="sd">        score (float)                                 : Score value to describe.</span>
-<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.</span>
+<span class="sd">        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the ``3`` points used to calculate the angle.</span>
 <span class="sd">        inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.</span>
 <span class="sd">        fontFace (int, optional)                      : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.</span>
 <span class="sd">        fontScale (int, optional)                     : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.</span>

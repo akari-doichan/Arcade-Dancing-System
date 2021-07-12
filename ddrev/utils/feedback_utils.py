@@ -176,11 +176,11 @@ def drawAuxiliaryAngle(
         score (float)                         : ``instructor's angles`` -``target's angles``.
         coords (Tuple[List[int], List[int]])  : Coordinates of the ``2`` points used to calculate the angle.
         inplace (bool, optional)              : Whether frame is edited in place. Defaults to ``True``.
-        thickness (int, optional)             : [description]. Defaults to ``1``.
+        thickness (int, optional)             : Line thickness. Defaults to ``1``.
         lineType (int, optional)              : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
-        shift (int, optional)                 : [description]. Defaults to ``0``.
-        tipLength (float, optional)           : [description]. Defaults to ``0.1``.
-        cmap (Union[str, Colormap], optional) : [description]. Defaults to ``"coolwarm_r"``.
+        shift (int, optional)                 : Number of fractional bits in the point coordinates. Defaults to ``0``.
+        tipLength (float, optional)           : The length of the arrow tip in relation to the arrow length. Defaults to ``0.1``.
+        cmap (Union[str, Colormap], optional) : Color map to apply. Defaults to ``"coolwarm_r"``.
 
     Returns:
         npt.NDArray[np.uint8]: An edited image.
@@ -188,7 +188,6 @@ def drawAuxiliaryAngle(
     .. plot::
         :class: popup-img
 
-    Examples:
         >>> import cv2
         >>> import numpy as np
         >>> import matplotlib.pyplot as plt

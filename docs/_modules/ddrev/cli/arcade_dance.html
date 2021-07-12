@@ -424,13 +424,13 @@
             <span class="n">is_ok</span><span class="p">,</span> <span class="n">frame_</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_ok</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">frame_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">frame</span>
-        <span class="n">landmarks_</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">string2landmarks</span><span class="p">(</span><span class="n">instructor_landmarks</span><span class="p">[</span><span class="n">curt_idx</span><span class="p">])</span>
-        <span class="n">scores_</span> <span class="o">=</span> <span class="n">instructor_scores</span><span class="p">[</span><span class="n">curt_idx</span><span class="p">]</span>
+        <span class="n">inst_landmarks</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">string2landmarks</span><span class="p">(</span><span class="n">instructor_landmarks</span><span class="p">[</span><span class="n">curt_idx</span><span class="p">])</span>
+        <span class="n">inst_scores</span> <span class="o">=</span> <span class="n">instructor_scores</span><span class="p">[</span><span class="n">curt_idx</span><span class="p">]</span>
 
         <span class="c1"># Draw Score.</span>
         <span class="n">estimator</span><span class="o">.</span><span class="n">draw_score</span><span class="p">(</span>
             <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
-            <span class="n">scores</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">scores</span> <span class="o">-</span> <span class="n">scores_</span><span class="p">),</span>
+            <span class="n">scores</span><span class="o">=</span><span class="n">inst_scores</span> <span class="o">-</span> <span class="n">scores</span><span class="p">,</span>
             <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks</span><span class="p">,</span>
             <span class="n">draw_func</span><span class="o">=</span><span class="n">drawScoreArc</span><span class="p">,</span>
             <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -438,7 +438,7 @@
             <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="c1"># Draw Instructor&#39;s video</span>
-        <span class="n">frame_</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame_</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">landmarks_</span><span class="p">)</span>
+        <span class="n">frame_</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame_</span><span class="p">,</span> <span class="n">landmarks</span><span class="o">=</span><span class="n">inst_landmarks</span><span class="p">)</span>
         <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span>
             <span class="n">img</span><span class="o">=</span><span class="n">frame_</span><span class="p">,</span>
             <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">video</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_POS_MSEC</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">instructor_duration_sec</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">[s]&quot;</span><span class="p">,</span>
