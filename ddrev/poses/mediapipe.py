@@ -447,7 +447,7 @@ class mpPoseEstimator(mp_pose.Pose, BasePoseEstimator):
 
         Args:
             frame (npt.NDArray[np.uint8])                                                                           : Input image.
-            scores (List[float])                                                                                    : Scores to display.
+            scores (List[float])                                                                                    : Scores to display. (If angles, ``instructor's angles`` -``target's angles``)
             landmarks (NormalizedLandmarkList)                                                                      : Landmarks.
             angle_points (List[List[int]])                                                                          : A list of 3 points used to determine the angle. Defaults to ``ANGLE_3POINTS``.
             draw_func (Callable[ [npt.NDArray[np.uint8], List[List[float]], float, bool], npt.NDArray[np.uint8], ]) : How to draw the ``score``. Defaults to :meth:`drawScoreArc <ddrev.utils.feedback_utils.drawScoreArc>`.

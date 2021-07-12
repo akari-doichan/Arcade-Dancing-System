@@ -95,7 +95,7 @@ def drawScoreArc(
     Args:
         frame (npt.NDArray[np.uint8])                 : Input image.
         score (float)                                 : Score value to describe.
-        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.
+        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the ``3`` points used to calculate the angle.
         inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.
         axes (Tuple[int, int], optional)              : Half of the size of the ellipse main axes. Defaults to ``(10, 10)``.
         lineType (int, optional)                      : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
@@ -140,6 +140,7 @@ def drawScoreArc(
     cx_slide = (cx + 10, cy)  # Slide the center point in the x-axis direction
     startAngle = 360.0 - calculate_angle(cx_slide, *coords[1:])
     angle = calculate_angle(*coords)
+    score = abs(score)
     if (score > 1) and (max_score is not None):
         score /= max_score
     cv2.ellipse(
@@ -152,6 +153,87 @@ def drawScoreArc(
         color=score2color(score, cmap=cmap),
         thickness=-1,
         lineType=lineType,
+    )
+    return frame
+
+
+def drawAuxiliaryAngle(
+    frame: npt.NDArray[np.uint8],
+    score: float,
+    coords: Tuple[List[int], List[int]],
+    inplace: bool = True,
+    thickness: int = 1,
+    lineType: int = cv2.LINE_8,
+    shift: int = 0,
+    tipLength: float = 0.1,
+    cmap: Union[str, Colormap] = "coolwarm_r",
+    **kwargs,
+) -> npt.NDArray[np.uint8]:
+    """Draw an auxiliary arrow.
+
+    Args:
+        frame (npt.NDArray[np.uint8])         : Input image.
+        score (float)                         : ``instructor's angles`` -``target's angles``.
+        coords (Tuple[List[int], List[int]])  : Coordinates of the ``2`` points used to calculate the angle.
+        inplace (bool, optional)              : Whether frame is edited in place. Defaults to ``True``.
+        thickness (int, optional)             : [description]. Defaults to ``1``.
+        lineType (int, optional)              : Type of the ellipse boundary. Defaults to ``cv2.LINE_8``.
+        shift (int, optional)                 : [description]. Defaults to ``0``.
+        tipLength (float, optional)           : [description]. Defaults to ``0.1``.
+        cmap (Union[str, Colormap], optional) : [description]. Defaults to ``"coolwarm_r"``.
+
+    Returns:
+        npt.NDArray[np.uint8]: An edited image.
+
+    .. plot::
+        :class: popup-img
+
+    Examples:
+        >>> import cv2
+        >>> import numpy as np
+        >>> import matplotlib.pyplot as plt
+        >>> from ddrev.utils import drawAuxiliaryAngle
+        >>> fig, ax = plt.subplots()
+        >>> A = np.asarray([0.2, 0.9])
+        >>> B = np.asarray([0.8, 0.6])
+        >>> C = np.asarray([0.3, 0.5])
+        >>> frame = np.zeros(shape=(150, 100, 3), dtype=np.uint8)
+        >>> H, W = frame.shape[:2]
+        >>> drawAuxiliaryAngle(frame,  0.3, coords=(B,C))
+        >>> drawAuxiliaryAngle(frame, -0.9, coords=(A,C))
+        >>> pX, pY = (None, None)
+        >>> for name, (x, y) in zip(list("ABCA"), [A,B,C,A]):
+        ...     X, Y = (int(x * W), int(y * H))
+        ...     ax.scatter(X, Y, color="red")
+        ...     ax.text(x=X, y=Y - 10, s=name, size=20, color="red")
+        ...     if pX is not None:
+        ...         cv2.line(frame, (pX, pY), (X, Y), (255, 0, 0))
+        ...     pX, pY = (X, Y)
+        >>> ax.imshow(frame)
+        >>> ax.axis("off")
+        >>> ax.set_title("drawAuxiliaryAngle", fontsize=18)
+        >>> fig.show()
+    """
+    H, W = frame.shape[:2]
+    if not inplace:
+        frame = frame.copy()
+    ax, ay = coords[0]
+    cx, cy = np.mean(coords, axis=0)
+    vx = ax - cx
+    vy = ay - cy
+    if score < 0:
+        vy = -vy
+    else:
+        vx = -vx
+    frame = cv2.arrowedLine(
+        img=frame,
+        pt1=(int(cx * W), int(cy * H)),
+        pt2=(int((cx + vy) * W), int((cy + vx) * H)),
+        color=score2color(abs(score), cmap=cmap),
+        thickness=thickness,
+        line_type=lineType,
+        shift=shift,
+        tipLength=tipLength,
     )
     return frame
 
@@ -171,7 +253,7 @@ def putScoreText(
     Args:
         frame (npt.NDArray[np.uint8])                 : Input image.
         score (float)                                 : Score value to describe.
-        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the 3 points used to calculate the angle.
+        coords (Tuple[List[int],List[int],List[int]]) : Coordinates of the ``3`` points used to calculate the angle.
         inplace (bool, optional)                      : Whether frame is edited in place. Defaults to ``True``.
         fontFace (int, optional)                      : Font type. Defaults to ``cv2.FONT_HERSHEY_PLAIN``.
         fontScale (int, optional)                     : Font scale factor that is multiplied by the font-specific base size.. Defaults to ``2``.

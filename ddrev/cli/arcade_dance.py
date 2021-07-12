@@ -266,13 +266,13 @@ def arcade_dance(argv=sys.argv[1:]):
             is_ok, frame_ = video.read()
             if (not is_ok) or (frame_ is None):
                 return frame
-        landmarks_ = estimator.string2landmarks(instructor_landmarks[curt_idx])
-        scores_ = instructor_scores[curt_idx]
+        inst_landmarks = estimator.string2landmarks(instructor_landmarks[curt_idx])
+        inst_scores = instructor_scores[curt_idx]
 
         # Draw Score.
         estimator.draw_score(
             frame=frame,
-            scores=np.abs(scores - scores_),
+            scores=inst_scores - scores,
             landmarks=landmarks,
             draw_func=drawScoreArc,
             inplace=True,
@@ -280,7 +280,7 @@ def arcade_dance(argv=sys.argv[1:]):
             axes=axes,
         )
         # Draw Instructor's video
-        frame_ = estimator.draw_landmarks(frame=frame_, landmarks=landmarks_)
+        frame_ = estimator.draw_landmarks(frame=frame_, landmarks=inst_landmarks)
         cv2.putText(
             img=frame_,
             text=f"{video.get(cv2.CAP_PROP_POS_MSEC)/1000:.2f}/{instructor_duration_sec:.1f}[s]",

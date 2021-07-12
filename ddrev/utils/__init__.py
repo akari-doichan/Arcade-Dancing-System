@@ -5,6 +5,7 @@ from ._exceptions import *
 from ._path import *
 from .feedback_utils import (
     cmap_indicator_create,
+    drawAuxiliaryAngle,
     drawScoreArc,
     putScoreText,
     score2color,
