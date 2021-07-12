@@ -6,6 +6,9 @@
 *.DS_Store
 .vscode
 arcade-dance*.mp4
+src/*
+docs-format.sh
+docs-generate.sh
 # --- Added by iwasakishuto ---
 
 # Byte-compiled / optimized / DLL files
